@@ -57,7 +57,7 @@ for large-scale batch analysis.
 ## Live Demo
 
 ▶ **Interactive Demo**  
-https://ruohanlixyf.github.io/complete-trip-explorer
+https://ruohanlixyf.github.io/Complete-Trip-Data-Explorer
 
 *(The demo uses a sampled and anonymized subset of data for visualization purposes.)*
 
