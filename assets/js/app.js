@@ -171,7 +171,12 @@
       el.className = "sample-item";
       el.textContent = `Sample ${i + 1}: ${s.trip_id}`;
       el.addEventListener("click", () => {
-        console.log("Clicked sample:", s.trip_id);
+        document
+          .querySelectorAll(".sample-item")
+          .forEach(x => x.classList.remove("active"));
+        el.classList.add("active");
+      
+        drawSampleOnMap(s);
       });
       list.appendChild(el);
     });
@@ -199,7 +204,43 @@
       });
     });
   }
-
+  function drawSampleOnMap(sample) {
+    // 清空旧图层
+    layers.tripRoute.clearLayers();
+    layers.accessEgress.clearLayers();
+  
+    // 1️⃣ 画轨迹（LineString）
+    if (sample.geometry && sample.geometry.coordinates) {
+      const coords = sample.geometry.coordinates.map(c => [c[1], c[0]]);
+      const line = L.polyline(coords, {
+        color: "#0A2A66",
+        weight: 4,
+        opacity: 0.85
+      });
+      layers.tripRoute.addLayer(line);
+      map.fitBounds(line.getBounds(), { padding: [30, 30] });
+    }
+  
+    // 2️⃣ 起点
+    if (sample.origin) {
+      layers.accessEgress.addLayer(
+        L.circleMarker(
+          [sample.origin.lat, sample.origin.lng],
+          { radius: 7, color: "#16a34a", fillOpacity: 0.9 }
+        ).bindTooltip("Origin")
+      );
+    }
+  
+    // 3️⃣ 终点
+    if (sample.destination) {
+      layers.accessEgress.addLayer(
+        L.circleMarker(
+          [sample.destination.lat, sample.destination.lng],
+          { radius: 7, color: "#dc2626", fillOpacity: 0.9 }
+        ).bindTooltip("Destination")
+      );
+    }
+  }
   /* =========================
      Checkbox → layer toggle
   ========================= */
@@ -223,11 +264,12 @@
     await loadStops();
     await loadRoutes();
 
-    Object.values(facilityLayers).forEach(l => map.addLayer(l));
 
     attachViewPillEvents();
     renderSampleList();   // ✅ 默认显示一次
-
+    if (SAMPLE.length > 0) {
+      drawSampleOnMap(SAMPLE[0]);
+    }
     document.querySelectorAll(".bm-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         switchBasemap(btn.dataset.basemap);

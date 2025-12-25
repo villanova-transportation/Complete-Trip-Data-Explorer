@@ -86,11 +86,6 @@ body{
   border-bottom: 1px solid #eef1f7;
   background: #fafbff;
 }
-.sidebar-top {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
 
 .view-grid {
   display: grid;
