@@ -162,7 +162,27 @@
     SAMPLE = json.samples;
     console.log("SAMPLE length:", SAMPLE.length);
   }
-
+  function attachViewPillEvents() {
+    const pills = document.querySelectorAll(".view-pill");
+    const samplePanel = document.getElementById("samples-panel");
+  
+    pills.forEach(pill => {
+      pill.addEventListener("click", () => {
+        pills.forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
+  
+        const view = pill.dataset.view;
+  
+        // 目前只实现 Samples
+        if (view === "samples") {
+          samplePanel.style.display = "block";
+          renderSampleList();   // 👈 关键
+        } else {
+          samplePanel.style.display = "none";
+        }
+      });
+    });
+  }
   /* =========================
      Checkbox → layer toggle
   ========================= */
@@ -202,6 +222,7 @@
     // attachEvents();
     // renderCompare();
     // drawExplore();
+    attachViewPillEvents();
     document.querySelectorAll(".bm-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         switchBasemap(btn.dataset.basemap);

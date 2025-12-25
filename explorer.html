@@ -52,15 +52,18 @@
       <!-- ===== TOP: View Selector ===== -->
       <div class="sidebar-top">
         <div class="view-grid">
-          <button class="view-pill active">Samples</button>
-          <button class="view-pill">OD</button>
-          <button class="view-pill">Access</button>
-          <button class="view-pill">Egress</button>
-          <button class="view-pill">Network</button>
-          <button class="view-pill">Speed</button>
+          <button class="view-pill active" data-view="samples">Samples</button>
+          <button class="view-pill" data-view="od">OD</button>
+          <button class="view-pill" data-view="access">Access</button>
+          <button class="view-pill" data-view="egress">Egress</button>
+          <button class="view-pill" data-view="network">Network</button>
+          <button class="view-pill" data-view="speed">Speed</button>
         </div>
       </div>
-
+      <!-- ===== Samples Panel ===== -->
+      <div id="samples-panel" class="panel active">
+        <div id="sampleList" class="sample-list"></div>
+      </div>
       <!-- ===== BOTTOM: Filters ===== -->
       <div class="sidebar-bottom">
 
