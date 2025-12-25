@@ -184,16 +184,30 @@
     // 默认全选（如果 HTML 里 checked）
     Object.values(facilityLayers).forEach(l => map.addLayer(l));
 
-    // 你原来的初始化
-    // initSelectors();
-    // attachEvents();
-    // renderCompare();
-    // drawExplore();
     document.querySelectorAll(".bm-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         switchBasemap(btn.dataset.basemap);
       });
     });
+
+  // =========================
+  // ✅ 默认加载 sample
+  // =========================
+  if (window.loadSampleData) {
+    try {
+      const sample = await window.loadSampleData();
+      console.log("Sample loaded:", sample);
+
+      // TODO：你真正画 trip 的函数
+      // drawExplore(sample);
+      // drawTrips(sample);
+    } catch (e) {
+      console.error(e);
+    }
+    
+  }
+
+
   }
 
   init();
