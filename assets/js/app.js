@@ -18,6 +18,76 @@
     railRoutes: L.layerGroup().addTo(map),
     tdi: L.geoJSON(null).addTo(map)
   };
+  // ===== Facility Layer Groups =====
+  const facilityLayers = {
+    bus_stop: L.layerGroup().addTo(map),
+    rail_stop: L.layerGroup().addTo(map),
+    bus_route: L.layerGroup().addTo(map),
+    rail_route: L.layerGroup().addTo(map)
+  };
+  async function loadStops() {
+    const res = await fetch("data/UTA/UTA_Stops.geojson");
+    const data = await res.json();
+
+    facilityLayers.bus_stop.clearLayers();
+    facilityLayers.rail_stop.clearLayers();
+
+    L.geoJSON(data, {
+      filter: feature => {
+        const mode = feature.properties.mode; // ← 如果字段名不同，改这里
+        return mode === "bus" || mode === "rail";
+      },
+      pointToLayer: (feature, latlng) => {
+        const mode = feature.properties.mode;
+
+        const layer = L.circleMarker(latlng, {
+          radius: 4,
+          color: mode === "bus" ? "#2563eb" : "#7c3aed",
+          weight: 1,
+          fillOpacity: 0.9
+        });
+
+        if (mode === "bus") {
+          layer.addTo(facilityLayers.bus_stop);
+        } else {
+          layer.addTo(facilityLayers.rail_stop);
+        }
+
+        return layer;
+      },
+      onEachFeature: (feature, layer) => {
+        layer.bindPopup(feature.properties.stop_name || "Stop");
+      }
+    });
+  }
+  async function loadRoutes() {
+    const res = await fetch("data/UTA/UTA_Routes.geojson");
+    const data = await res.json();
+
+    facilityLayers.bus_route.clearLayers();
+    facilityLayers.rail_route.clearLayers();
+
+    L.geoJSON(data, {
+      filter: feature => {
+        const mode = feature.properties.mode;
+        return mode === "bus" || mode === "rail";
+      },
+      style: feature => ({
+        color: feature.properties.mode === "bus" ? "#2563eb" : "#7c3aed",
+        weight: 2,
+        opacity: 0.6
+      }),
+      onEachFeature: (feature, layer) => {
+        layer.bindPopup(feature.properties.route_name || "Route");
+
+        if (feature.properties.mode === "bus") {
+          layer.addTo(facilityLayers.bus_route);
+        } else {
+          layer.addTo(facilityLayers.rail_route);
+        }
+      }
+    });
+  }
 
   // ---------- DOM ----------
   const selMonth = document.getElementById("selMonth");
@@ -401,6 +471,9 @@
     selTdiView.addEventListener("change", drawTDI);
     selTdiMonth.addEventListener("change", drawTDI);
   }
+  // ===== Initial load =====
+  loadStops();
+  loadRoutes();
 
   // ---------- Init ----------
   function init() {
