@@ -451,3 +451,23 @@ select:focus{
   color: #fff;
   border-color: #0A2A66;
 }
+#samples-panel {
+  display: block;
+}
+
+#sampleList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sample-item {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.sample-item:hover {
+  background: var(--bg-soft);
+}
