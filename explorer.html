@@ -37,178 +37,111 @@
 
   <!-- View Selector -->
   <div class="view-selector">
-    <button class="view-btn active" data-view="trips">
-      Complete Trips
+    <button class="view-btn active" data-view="complete">
+      Complete Trip
     </button>
-    <button class="view-btn" data-view="od">
-      OD Patterns
-    </button>
-    <button class="view-btn" data-view="access">
-      Access &amp; Egress
-    </button>
-    <button class="view-btn" data-view="tdi">
-      Transit Desert (TDI)
+    <button class="view-btn" data-view="applications">
+      Applications
     </button>
   </div>
   
   <div id="layout">
     <!-- Sidebar -->
     <aside id="sidebar">
-      <div class="card">
-        <h3>Filters</h3>
 
-        <div class="form-row">
-          <label>Month</label>
-          <select id="monthSelect"></select>
+      <!-- ================= COMPLETE TRIP ================= -->
+      <section class="sidebar-panel active" data-view="complete">
+
+        <!-- Structural lens selector -->
+        <div class="card">
+          <h4>View</h4>
+          <div class="lens-selector">
+            <button class="lens-btn active" data-lens="sample">Complete Trip Sample</button>
+            <button class="lens-btn" data-lens="od">OD Structure</button>
+            <button class="lens-btn" data-lens="access">Access / Egress</button>
+            <button class="lens-btn" data-lens="network">Road Network Usage</button>
+            <button class="lens-btn" data-lens="speed">Speed</button>
+          </div>
         </div>
 
-        <div class="form-row">
-          <label>Mode</label>
-          <select id="modeSelect">
-            <option value="ALL">All</option>
-            <option value="TRANSIT">Transit</option>
-            <option value="AUTO">Auto</option>
-            <option value="WALK">Walk</option>
-          </select>
-        </div>
+        <!-- Filters (content depends on lens) -->
+        <div class="card">
+          <h4>Filters</h4>
 
-        <div class="form-row">
-          <label>OD Pair</label>
-          <select id="odSelect"></select>
-        </div>
+          <div class="form-row">
+            <label>Month</label>
+            <select></select>
+          </div>
 
-        <div class="form-row inline">
+          <div class="form-row">
+            <label>Mode</label>
+            <select>
+              <option>All</option>
+              <option>Transit</option>
+              <option>Auto</option>
+              <option>Walk</option>
+            </select>
+          </div>
+
           <label class="checkbox">
-            <input id="linkedOnly" type="checkbox" />
+            <input type="checkbox" />
             Linked trips only
           </label>
         </div>
 
-        <div class="hint">
-          Sample data for UI scaffolding. Replace with real data later.
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Tabs</h3>
-        <div class="tab-bar">
-          <button class="tab-btn active" data-tab="tabTrips">Trips</button>
-          <button class="tab-btn" data-tab="tabLayers">UTA Layers</button>
-          <button class="tab-btn" data-tab="tabCompare">Compare</button>
-          <button class="tab-btn" data-tab="tabTDI">TDI</button>
-        </div>
-      </div>
-
-      <!-- Trips tab -->
-      <div id="tabTrips" class="tab-panel active">
-        <div class="card">
-          <h3>OD Summary</h3>
-          <div id="odSummary" class="kv"></div>
-        </div>
-
-        <div class="card">
-          <h3>Trip Samples</h3>
-          <div class="small">Click a trip to render full path + access/egress on the map.</div>
-          <div id="tripList" class="list"></div>
-        </div>
-      </div>
-
-      <!-- Layers tab -->
-      <div id="tabLayers" class="tab-panel">
-        <div class="card">
-          <h3>UTA Overlay</h3>
-
-          <label class="checkbox">
-            <input type="checkbox" id="toggleBusStops" checked />
-            Bus stops
-          </label>
-
-          <label class="checkbox">
-            <input type="checkbox" id="toggleRailStops" checked />
-            Rail stations
-          </label>
-
-          <label class="checkbox">
-            <input type="checkbox" id="toggleBusRoutes" />
-            Bus routes (sample)
-          </label>
-
-          <label class="checkbox">
-            <input type="checkbox" id="toggleRailRoutes" />
-            Rail routes (sample)
-          </label>
-
-          <div class="hint">
-            These are sample geometries for the framework. Replace with UTA GTFS/shape exports later.
-          </div>
-        </div>
-      </div>
-
-      <!-- Compare tab -->
-      <div id="tabCompare" class="tab-panel">
-        <div class="card">
-          <h3>Comparisons</h3>
+        <!-- Explanation (optional but very good for TRB) -->
+        <div class="card subtle">
           <div class="small">
-            Framework for: Our data vs USDOT, and our data vs UTA.
-          </div>
-
-          <div class="form-row">
-            <label>Comparison type</label>
-            <select id="compareSelect">
-              <option value="USDOT">Our vs USDOT (sample)</option>
-              <option value="UTA">Our vs UTA (sample)</option>
-            </select>
-          </div>
-
-          <div id="compareTable" class="table"></div>
-
-          <div class="hint">
-            Replace the sample metrics with real aggregation outputs (trip counts, mode share, access distance, etc.).
+            Complete Trip represents a full door-to-door multimodal journey,
+            including access, transfers, and egress, reconstructed on real
+            transportation networks.
           </div>
         </div>
-      </div>
 
-      <!-- TDI tab -->
-      <div id="tabTDI" class="tab-panel">
+      </section>
+
+      <!-- ================= APPLICATIONS ================= -->
+      <section class="sidebar-panel" data-view="applications">
+
         <div class="card">
-          <h3>TDI View</h3>
+          <h4>Application</h4>
+          <select>
+            <option>Transit Desert (TDI)</option>
+            <option disabled>Tourism (coming soon)</option>
+          </select>
+        </div>
 
-          <div class="form-row">
-            <label>Temporal scale</label>
-            <select id="tdiScale">
-              <option value="MONTHLY">Monthly</option>
-              <option value="ANNUAL">Annual</option>
-            </select>
-          </div>
+        <div class="card">
+          <h4>Temporal Scale</h4>
+          <select>
+            <option>Monthly</option>
+            <option>Annual</option>
+          </select>
+        </div>
 
-          <div class="form-row">
-            <label>Year</label>
-            <select id="tdiYear"></select>
-          </div>
-
-          <div class="form-row" id="tdiMonthRow">
-            <label>Month</label>
-            <select id="tdiMonth"></select>
-          </div>
-
+        <div class="card">
+          <h4>Layers</h4>
           <label class="checkbox">
-            <input type="checkbox" id="toggleTDI" checked />
-            Show Transit Desert (choropleth)
+            <input type="checkbox" checked />
+            Show TDI choropleth
           </label>
+          <label class="checkbox">
+            <input type="checkbox" />
+            Show access mismatch arrows
+          </label>
+        </div>
 
-          <div class="legend">
-            <div class="legend-title">TDI (sample)</div>
-            <div class="legend-row"><span class="swatch s1"></span> Low</div>
-            <div class="legend-row"><span class="swatch s2"></span> Mid</div>
-            <div class="legend-row"><span class="swatch s3"></span> High (Desert)</div>
-          </div>
-
-          <div class="hint">
-            TDI here is a placeholder choropleth per zone. Swap in your real zone polygons + TDI values.
+        <div class="card subtle">
+          <div class="small">
+            Transit Desert diagnostics are derived from complete trip representations,
+            revealing behavioral mismatches between demand and transit supply.
           </div>
         </div>
-      </div>
+
+      </section>
+
     </aside>
+
 
     <!-- Map -->
     <main id="map-wrap">
