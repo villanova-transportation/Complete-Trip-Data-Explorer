@@ -301,7 +301,7 @@ select:focus{
   justify-content: center;
   gap: 6px;
 
-  padding: 8px 12px;
+  padding: 4px 10px;
   background: #f7f9ff;
   border-bottom: 1px solid #e2e6f0;
 }
@@ -312,10 +312,10 @@ select:focus{
   border: none;
   background: transparent;
 
-  padding: 8px 14px;
+  padding: 6px 12px;
   border-radius: 999px;
 
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
 
   color: #0A2A66; /* Villanova blue */
