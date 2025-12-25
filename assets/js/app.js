@@ -1,4 +1,4 @@
-/* global L, SAMPLE */
+/* global L */
 
 (function () {
 
@@ -22,6 +22,10 @@
       { attribution: "© OpenStreetMap © CARTO" }
     )
   };
+
+  let currentBasemap = "light";
+  baseMaps.light.addTo(map);
+
   function switchBasemap(name) {
     if (name === currentBasemap) return;
 
@@ -29,45 +33,32 @@
     baseMaps[name].addTo(map);
     currentBasemap = name;
 
-    // UI state
     document.querySelectorAll(".bm-btn").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.basemap === name);
     });
   }
 
-  // 默认底图
-  baseMaps.light.addTo(map);
-  let currentBasemap = "light";
-
+  /* =========================
+     Mode helpers
+  ========================= */
   function normalizeStopMode(mode) {
     if (!mode) return null;
-
     const m = mode.toLowerCase();
-
     if (m.includes("bus") || m.includes("micro")) return "bus";
     if (m.includes("trax") || m.includes("frontrunner")) return "rail";
-
     return null;
   }
+
   function normalizeRouteMode(routeType) {
     if (!routeType) return null;
-
-    const railLines = [
-      "blue line",
-      "red line",
-      "green line",
-      "s line",
-      "frontrunner"
-    ];
-
+    const railLines = ["blue line", "red line", "green line", "s line", "frontrunner"];
     const t = routeType.toLowerCase();
-
     if (railLines.some(r => t.includes(r))) return "rail";
     return "bus";
   }
 
   /* =========================
-     Core layers (Explorer / TDI)
+     Core layers
   ========================= */
   const layers = {
     od: L.layerGroup().addTo(map),
@@ -77,7 +68,37 @@
   };
 
   /* =========================
-     Facility layers (GeoJSON only)
+     Draw sample trips
+  ========================= */
+  function drawSampleTrips(samples) {
+    layers.tripRoute.clearLayers();
+
+    samples.forEach(s => {
+      if (!s.route || s.route.length < 2) return;
+
+      const color =
+        s.mode === "rail"
+          ? "#7c3aed"
+          : s.mode === "bus"
+          ? "#2563eb"
+          : "#16a34a";
+
+      L.polyline(s.route, {
+        color,
+        weight: 4,
+        opacity: 0.85
+      })
+        .bindPopup(
+          `<strong>${s.id}</strong><br/>
+           Mode: ${s.mode}<br/>
+           Duration: ${s.duration || "N/A"}`
+        )
+        .addTo(layers.tripRoute);
+    });
+  }
+
+  /* =========================
+     Facility layers
   ========================= */
   const facilityLayers = {
     bus_stop: L.layerGroup().addTo(map),
@@ -115,7 +136,6 @@
         if (mode === "bus") layer.addTo(facilityLayers.bus_stop);
         if (mode === "rail") layer.addTo(facilityLayers.rail_stop);
 
-
         return layer;
       }
     });
@@ -135,8 +155,6 @@
         opacity: 0.6
       }),
       onEachFeature: (f, layer) => {
-        layer.bindPopup(f.properties.route_name || "Route");
-
         const mode = normalizeRouteMode(f.properties.routetype);
         if (!mode) return;
 
@@ -146,9 +164,18 @@
 
         if (mode === "bus") layer.addTo(facilityLayers.bus_route);
         if (mode === "rail") layer.addTo(facilityLayers.rail_route);
-
       }
     });
+  }
+
+  /* =========================
+     Load sample JSON
+  ========================= */
+  async function loadSampleTrips() {
+    const res = await fetch("data/samples/samples.json");
+    if (!res.ok) throw new Error("Failed to load samples.json");
+    const json = await res.json();
+    return json.samples;
   }
 
   /* =========================
@@ -160,19 +187,10 @@
       cb.addEventListener("change", e => {
         const layer = facilityLayers[e.target.dataset.layer];
         if (!layer) return;
-
         if (e.target.checked) map.addLayer(layer);
         else map.removeLayer(layer);
       });
     });
-
-  /* =========================
-     Explorer logic（原样保留）
-     ↓↓↓ 以下基本是你原来的代码 ↓↓↓
-  ========================= */
-
-  // 这里只示意：你原来的 drawExplore / drawTripOnMap / TDI 等
-  // 完全不用动，只是不要再调用 drawUtaOverlays
 
   /* =========================
      Init
@@ -181,7 +199,6 @@
     await loadStops();
     await loadRoutes();
 
-    // 默认全选（如果 HTML 里 checked）
     Object.values(facilityLayers).forEach(l => map.addLayer(l));
 
     document.querySelectorAll(".bm-btn").forEach(btn => {
@@ -190,24 +207,22 @@
       });
     });
 
-  // =========================
-  // ✅ 默认加载 sample
-  // =========================
-  if (window.loadSampleData) {
+    // ===== Load samples =====
     try {
-      const sample = await window.loadSampleData();
-      console.log("Sample loaded:", sample);
+      const samples = await loadSampleTrips();
+      drawSampleTrips(samples);
 
-      // TODO：你真正画 trip 的函数
-      // drawExplore(sample);
-      // drawTrips(sample);
+      const status = document.getElementById("mapStatus");
+      if (status) {
+        status.innerText = `Sample data loaded · ${samples.length} trips`;
+      }
     } catch (e) {
       console.error(e);
+      const status = document.getElementById("mapStatus");
+      if (status) {
+        status.innerText = "Failed to load sample data";
+      }
     }
-    
-  }
-
-
   }
 
   init();
