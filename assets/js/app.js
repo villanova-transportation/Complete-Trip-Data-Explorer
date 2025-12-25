@@ -12,6 +12,33 @@
     attribution: "© OpenStreetMap contributors"
   }).addTo(map);
 
+  const baseMaps = {
+    light: L.tileLayer(
+      "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+      { attribution: "© OpenStreetMap © CARTO" }
+    ),
+    dark: L.tileLayer(
+      "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+      { attribution: "© OpenStreetMap © CARTO" }
+    )
+  };
+  function switchBasemap(name) {
+    if (name === currentBasemap) return;
+
+    Object.values(baseMaps).forEach(l => map.removeLayer(l));
+    baseMaps[name].addTo(map);
+    currentBasemap = name;
+
+    // UI state
+    document.querySelectorAll(".bm-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.basemap === name);
+    });
+  }
+
+  // 默认底图
+  baseMaps.light.addTo(map);
+  let currentBasemap = "light";
+
   function normalizeStopMode(mode) {
     if (!mode) return null;
 
@@ -162,6 +189,11 @@
     // attachEvents();
     // renderCompare();
     // drawExplore();
+    document.querySelectorAll(".bm-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        switchBasemap(btn.dataset.basemap);
+      });
+    });
   }
 
   init();
