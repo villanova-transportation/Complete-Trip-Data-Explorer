@@ -77,13 +77,13 @@
       if (!s.route || s.route.length < 2) return;
 
       const color =
-        s.mode === "rail"
-          ? "#7c3aed"
-          : s.mode === "bus"
-          ? "#2563eb"
-          : s.mode === "walk_bike"
-          ? "#16a34a"
-          : "#6b7280"; // unknown / other
+      s.mode === "rail"
+        ? "#7c3aed"
+        : s.mode === "bus"
+        ? "#2563eb"
+        : s.mode === "walk_bike"
+        ? "#16a34a"
+        : "#6b7280"; // unknown / other
 
       L.polyline(s.route, {
         color,
@@ -91,7 +91,7 @@
         opacity: 0.85
       })
         .bindPopup(
-          `<strong>${s.id}</strong><br/>
+          <strong>${s.id}</strong><br/>
            Mode: ${s.mode}<br/>
            Duration: ${
             typeof s.duration_min === "number"
