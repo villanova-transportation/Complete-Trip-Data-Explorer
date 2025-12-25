@@ -175,4 +175,15 @@ header h2 {
 .villanova-logo {
   height: 34px;
   opacity: 0.95;
+  border-radius: 4px;   /* 轻微圆角 */
+}
+
+.lab-wordmark {
+  font-size: 18px;
+  font-weight: 700;   /* 加粗 */
+}
+
+.main-title {
+  font-size: 20px;
+  font-weight: 700;   /* 加粗 */
 }
