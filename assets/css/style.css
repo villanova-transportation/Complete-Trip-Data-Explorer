@@ -6,6 +6,51 @@ body {
   color: #333;
   line-height: 1.55;
 }
+/* ===== Top Bar ===== */
+.top-bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 12px 24px;
+  background: #0A2A66;   /* Villanova classic blue */
+  color: white;
+}
+
+/* Left: Lab wordmark */
+.lab-wordmark {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.lab-wordmark .nova {
+  color: #ffffff;
+}
+
+.lab-wordmark .mobility {
+  color: #32B5FF;   /* NovaMobility light blue */
+}
+
+/* Center: titles */
+.center-group {
+  text-align: center;
+}
+
+.main-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.sub-title {
+  font-size: 13px;
+  color: #cfe3ff;
+}
+
+/* Right: Villanova */
+.villanova-mark {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
 
 /* ===== Landing Page ===== */
 .landing-container {
