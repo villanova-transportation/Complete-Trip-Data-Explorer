@@ -154,8 +154,13 @@
 
   async function loadSamples() {
     const res = await fetch("data/samples/samples.json");
+    console.log("sample fetch status:", res.status);
+  
     const json = await res.json();
+    console.log("sample json:", json);
+  
     SAMPLE = json.samples;
+    console.log("SAMPLE length:", SAMPLE.length);
   }
 
   /* =========================
