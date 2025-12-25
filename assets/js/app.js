@@ -22,6 +22,11 @@
       { attribution: "© OpenStreetMap © CARTO" }
     )
   };
+
+  // 默认底图
+  baseMaps.light.addTo(map);
+  let currentBasemap = "light";
+
   function switchBasemap(name) {
     if (name === currentBasemap) return;
 
@@ -29,29 +34,24 @@
     baseMaps[name].addTo(map);
     currentBasemap = name;
 
-    // UI state
     document.querySelectorAll(".bm-btn").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.basemap === name);
     });
   }
 
-  // 默认底图
-  baseMaps.light.addTo(map);
-  let currentBasemap = "light";
-
+  /* =========================
+     Mode normalization
+  ========================= */
   function normalizeStopMode(mode) {
     if (!mode) return null;
-
     const m = mode.toLowerCase();
-
     if (m.includes("bus") || m.includes("micro")) return "bus";
     if (m.includes("trax") || m.includes("frontrunner")) return "rail";
-
     return null;
   }
+
   function normalizeRouteMode(routeType) {
     if (!routeType) return null;
-
     const railLines = [
       "blue line",
       "red line",
@@ -59,15 +59,13 @@
       "s line",
       "frontrunner"
     ];
-
     const t = routeType.toLowerCase();
-
     if (railLines.some(r => t.includes(r))) return "rail";
     return "bus";
   }
 
   /* =========================
-     Core layers (Explorer / TDI)
+     Core layers
   ========================= */
   const layers = {
     od: L.layerGroup().addTo(map),
@@ -76,9 +74,6 @@
     tdi: L.geoJSON(null).addTo(map)
   };
 
-  /* =========================
-     Facility layers (GeoJSON only)
-  ========================= */
   const facilityLayers = {
     bus_stop: L.layerGroup().addTo(map),
     rail_stop: L.layerGroup().addTo(map),
@@ -115,7 +110,6 @@
         if (mode === "bus") layer.addTo(facilityLayers.bus_stop);
         if (mode === "rail") layer.addTo(facilityLayers.rail_stop);
 
-
         return layer;
       }
     });
@@ -130,13 +124,13 @@
 
     L.geoJSON(data, {
       style: f => ({
-        color: f.properties.mode === "bus" ? "#2563eb" : "#7c3aed",
+        color: normalizeRouteMode(f.properties.routetype) === "bus"
+          ? "#2563eb"
+          : "#7c3aed",
         weight: 2,
         opacity: 0.6
       }),
       onEachFeature: (f, layer) => {
-        layer.bindPopup(f.properties.route_name || "Route");
-
         const mode = normalizeRouteMode(f.properties.routetype);
         if (!mode) return;
 
@@ -146,43 +140,66 @@
 
         if (mode === "bus") layer.addTo(facilityLayers.bus_route);
         if (mode === "rail") layer.addTo(facilityLayers.rail_route);
-
       }
     });
   }
+
+  /* =========================
+     Samples
+  ========================= */
   let SAMPLE = [];
 
   async function loadSamples() {
     const res = await fetch("data/samples/samples.json");
-    console.log("sample fetch status:", res.status);
-  
     const json = await res.json();
-    console.log("sample json:", json);
-  
-    SAMPLE = json.samples;
-    console.log("SAMPLE length:", SAMPLE.length);
+    SAMPLE = json.samples || [];
   }
+
+  function renderSampleList() {
+    const list = document.getElementById("sampleList");
+    if (!list) return;
+
+    list.innerHTML = "";
+
+    if (!SAMPLE.length) {
+      list.innerHTML = `<div class="small">No samples loaded.</div>`;
+      return;
+    }
+
+    SAMPLE.forEach((s, i) => {
+      const el = document.createElement("div");
+      el.className = "sample-item";
+      el.textContent = `Sample ${i + 1}: ${s.trip_id}`;
+      el.addEventListener("click", () => {
+        console.log("Clicked sample:", s.trip_id);
+      });
+      list.appendChild(el);
+    });
+  }
+
   function attachViewPillEvents() {
     const pills = document.querySelectorAll(".view-pill");
     const samplePanel = document.getElementById("samples-panel");
-  
+
+    if (!samplePanel) return;
+
     pills.forEach(pill => {
       pill.addEventListener("click", () => {
         pills.forEach(p => p.classList.remove("active"));
         pill.classList.add("active");
-  
+
         const view = pill.dataset.view;
-  
-        // 目前只实现 Samples
+
         if (view === "samples") {
           samplePanel.style.display = "block";
-          renderSampleList();   // 👈 关键
+          renderSampleList();
         } else {
           samplePanel.style.display = "none";
         }
       });
     });
   }
+
   /* =========================
      Checkbox → layer toggle
   ========================= */
@@ -199,14 +216,6 @@
     });
 
   /* =========================
-     Explorer logic（原样保留）
-     ↓↓↓ 以下基本是你原来的代码 ↓↓↓
-  ========================= */
-
-  // 这里只示意：你原来的 drawExplore / drawTripOnMap / TDI 等
-  // 完全不用动，只是不要再调用 drawUtaOverlays
-
-  /* =========================
      Init
   ========================= */
   async function init() {
@@ -214,15 +223,11 @@
     await loadStops();
     await loadRoutes();
 
-    // 默认全选（如果 HTML 里 checked）
     Object.values(facilityLayers).forEach(l => map.addLayer(l));
 
-    // 你原来的初始化
-    // initSelectors();
-    // attachEvents();
-    // renderCompare();
-    // drawExplore();
     attachViewPillEvents();
+    renderSampleList();   // ✅ 默认显示一次
+
     document.querySelectorAll(".bm-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         switchBasemap(btn.dataset.basemap);
