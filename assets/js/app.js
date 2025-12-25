@@ -81,7 +81,9 @@
           ? "#7c3aed"
           : s.mode === "bus"
           ? "#2563eb"
-          : "#16a34a";
+          : s.mode === "walk_bike"
+          ? "#16a34a"
+          : "#6b7280"; // unknown / other
 
       L.polyline(s.route, {
         color,
@@ -91,7 +93,11 @@
         .bindPopup(
           `<strong>${s.id}</strong><br/>
            Mode: ${s.mode}<br/>
-           Duration: ${s.duration || "N/A"}`
+           Duration: ${
+            typeof s.duration_min === "number"
+              ? `${s.duration_min} min`
+              : "N/A"
+          }
         )
         .addTo(layers.tripRoute);
     });
