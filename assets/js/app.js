@@ -66,6 +66,7 @@ let currentViewBounds = null;
     accessEgress: L.layerGroup().addTo(map),
     tdi: L.geoJSON(null).addTo(map)
   };
+  let samplesVisible = true;
 
   /* =========================
      Draw sample trips
@@ -105,8 +106,16 @@ let currentViewBounds = null;
       currentViewBounds = bounds;          // 🔑 保存当前数据视角
       map.fitBounds(bounds, { padding: [40, 40] });
     }
-  }
+    }
+  function toggleSamples() {
+    samplesVisible = !samplesVisible;
 
+    if (samplesVisible) {
+      layers.tripRoute.addTo(map);
+    } else {
+      layers.tripRoute.removeFrom(map);
+    }
+  }
   function recenterMap() {
     if (currentViewBounds) {
       map.fitBounds(currentViewBounds, { padding: [40, 40] });
@@ -245,8 +254,6 @@ let currentViewBounds = null;
       console.error("loadRoutes failed", e);
     }
 
-    Object.values(facilityLayers).forEach(l => map.addLayer(l));
-
     document.querySelectorAll(".bm-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         switchBasemap(btn.dataset.basemap);
@@ -260,6 +267,9 @@ let currentViewBounds = null;
     } catch (e) {
       console.error("loadSampleTrips failed", e);
     }
+    document.querySelector('[data-view="samples"]').addEventListener("click", () => {
+      toggleSamples();
+    });
   }
 
   init();
