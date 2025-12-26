@@ -406,6 +406,10 @@ let currentViewBounds = null;
     document.querySelector('[data-view="od"]').addEventListener("click", () => {
       toggleOD();
     });
+
+    let odVisible = false;
+    let cachedOD = null;
+
     async function toggleOD() {
       odVisible = !odVisible;
 
@@ -419,30 +423,13 @@ let currentViewBounds = null;
       }
 
       drawODFlows(cachedOD, {
-        month: "2020-04",     // 之后可接 slider
+        month: "2020-01",     // 之后可接 slider
         useLinked: true
       });
     }
-    let odVisible = false;
-    let cachedOD = null;
-
-    document.getElementById("od-btn").addEventListener("click", async () => {
-      odVisible = !odVisible;
-
-      if (!odVisible) {
-        layers.od.clearLayers();
-        return;
-      }
-
-      if (!cachedOD) {
-        cachedOD = await loadODFlows();
-      }
-
-      drawODFlows(cachedOD, {
-        month: "2020-04",      // 🔧 以后可以接 slider
-        useLinked: true        // 🔧 linked / unlinked toggle
-      });
-    });
+    document
+      .querySelector('[data-view="od"]')
+      .addEventListener("click", toggleOD);
 
   }
 
