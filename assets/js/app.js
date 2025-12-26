@@ -354,7 +354,7 @@ let currentViewBounds = null;
     return json.samples;
   }
   async function loadODFlows() {
-    const res = await fetch("data/od/od_dashboard_topk.json");
+    const res = await fetch("data/OD/od_dashboard_topk.json");
     if (!res.ok) throw new Error("Failed to load OD JSON");
     return await res.json();
   }
