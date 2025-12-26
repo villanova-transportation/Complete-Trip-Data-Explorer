@@ -200,7 +200,7 @@ let currentViewBounds = null;
     odData.forEach(d => {
       if (month && d.month !== month) return;
 
-      // ① 坐标存在性 + 数值合法性（双保险）
+      // ① 坐标存在性 + 数值合法性
       const oLat = Number(d.o_lat);
       const oLon = Number(d.o_lon);
       const dLat = Number(d.d_lat);
@@ -220,13 +220,13 @@ let currentViewBounds = null;
       const count = useLinked ? d.linked_count : d.unlinked_count;
       if (!Number.isFinite(count) || count <= 0) return;
 
-      // ③ 防御：禁止零长度 OD（O==D）
+      // ③ 防御：禁止零长度 OD
       if (oLat === dLat && oLon === dLon) {
         console.warn("❌ Skip OD (zero-length):", d);
         return;
       }
 
-      // ===== 曲率 =====
+      // ===== 曲率（用于“伪曲线”）=====
       const dx = dLon - oLon;
       const dy = dLat - oLat;
       const dist = Math.sqrt(dx * dx + dy * dy);
@@ -235,19 +235,21 @@ let currentViewBounds = null;
       const midLat = (oLat + dLat) / 2 + curvature;
       const midLon = (oLon + dLon) / 2;
 
-      // ===== 线宽 =====
+      // ===== 线宽 scaling =====
       const weight = 1 + 6 * (count / maxCount);
 
-      const path = L.curve(
+      // ✅ 用 polyline（三点）代替 curve
+      const path = L.polyline(
         [
-          "M", [oLat, oLon],
-          "Q", [midLat, midLon],
-              [dLat, dLon]
+          [oLat, oLon],
+          [midLat, midLon],
+          [dLat, dLon]
         ],
         {
           color: "rgba(59,130,246,0.7)",
-          weight,
+          weight: weight,
           opacity: 0.8,
+          smoothFactor: 1.5,   // 视觉更平滑
           interactive: true
         }
       );
@@ -260,6 +262,7 @@ let currentViewBounds = null;
 
       path.addTo(layers.od);
     });
+
   }
 
   function recenterMap() {
