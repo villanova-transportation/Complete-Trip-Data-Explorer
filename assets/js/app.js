@@ -421,16 +421,14 @@ let currentViewBounds = null;
       }
 
       drawODFlows(cachedOD, {
-        month: "2020-01",     // 之后可接 slider
+        month: null,   // 👈 不过滤
         useLinked: true
       });
     }
     document
       .querySelector('[data-view="od"]')
       .addEventListener("click", toggleOD);
-    let tractCentroids = null;
 
-    tractCentroids = await loadTractCentroids();
   }
 
   init();
