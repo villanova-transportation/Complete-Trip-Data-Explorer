@@ -233,8 +233,17 @@ let currentViewBounds = null;
      Init
   ========================= */
   async function init() {
-    await loadStops();
-    await loadRoutes();
+    try {
+      await loadStops();
+    } catch (e) {
+      console.error("loadStops failed", e);
+    }
+
+    try {
+      await loadRoutes();
+    } catch (e) {
+      console.error("loadRoutes failed", e);
+    }
 
     Object.values(facilityLayers).forEach(l => map.addLayer(l));
 
@@ -248,17 +257,8 @@ let currentViewBounds = null;
     try {
       const samples = await loadSampleTrips();
       drawSampleTrips(samples);
-
-      const status = document.getElementById("mapStatus");
-      if (status) {
-        status.innerText = `Sample data loaded · ${samples.length} trips`;
-      }
     } catch (e) {
-      console.error(e);
-      const status = document.getElementById("mapStatus");
-      if (status) {
-        status.innerText = "Failed to load sample data";
-      }
+      console.error("loadSampleTrips failed", e);
     }
   }
 
