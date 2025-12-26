@@ -85,7 +85,7 @@ let currentViewBounds = null;
         s.mode === "rail"
           ? "#e23c1bff"
           : s.mode === "bus"
-          ? "rgba(235, 129, 37, 1)"
+          ? "rgba(37, 166, 235, 1)"
           : s.mode === "car"
           ? "#391b57ff"
           : s.mode === "walk_bike"
