@@ -200,41 +200,51 @@ let currentViewBounds = null;
     odData.forEach(d => {
       if (month && d.month !== month) return;
 
-      const {
-        o_lat, o_lon,
-        d_lat, d_lon
-      } = d;
+      const oLat = Number(d.o_lat);
+      const oLon = Number(d.o_lon);
+      const dLat = Number(d.d_lat);
+      const dLon = Number(d.d_lon);
 
-      // 🔴 核心：坐标合法性检查
+      // 🔴 第一层：端点合法性
       if (
-        !Number.isFinite(o_lat) ||
-        !Number.isFinite(o_lon) ||
-        !Number.isFinite(d_lat) ||
-        !Number.isFinite(d_lon)
+        !Number.isFinite(oLat) ||
+        !Number.isFinite(oLon) ||
+        !Number.isFinite(dLat) ||
+        !Number.isFinite(dLon)
       ) {
-        console.warn("Skip OD with invalid coords:", d);
+        console.warn("Skip OD (invalid endpoint):", d);
         return;
       }
 
       const count = useLinked ? d.linked_count : d.unlinked_count;
       if (!count || count <= 0) return;
 
-      const oLat = d.o_lat;
-      const oLon = d.o_lon;
-      const dLat = d.d_lat;
-      const dLon = d.d_lon;
-
-      // ===== 曲率（按距离自适应）=====
+      // ===== 中点 & 曲率 =====
       const dx = dLon - oLon;
       const dy = dLat - oLat;
       const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (!Number.isFinite(dist) || dist === 0) {
+        console.warn("Skip OD (bad dist):", d);
+        return;
+      }
+
       const curvature = dist * 0.3;
 
       const midLat = (oLat + dLat) / 2 + curvature;
       const midLon = (oLon + dLon) / 2;
 
-      // ===== 线宽 scaling =====
-      const weight = 1 + 6 * (count / maxCount);
+      // 🔴 第二层：控制点合法性（你之前漏了这个）
+      if (
+        !Number.isFinite(midLat) ||
+        !Number.isFinite(midLon)
+      ) {
+        console.warn("Skip OD (invalid control point):", d);
+        return;
+      }
+
+      const maxCountSafe = Math.max(1, maxCount);
+      const weight = 1 + 6 * (count / maxCountSafe);
 
       const path = L.curve(
         [
@@ -243,23 +253,16 @@ let currentViewBounds = null;
               [dLat, dLon]
         ],
         {
-          color: "rgba(59,130,246,0.7)",   // blue
-          weight: weight,
+          color: "rgba(59,130,246,0.7)",
+          weight,
           opacity: 0.8,
           interactive: true
         }
       );
 
-      path.bindPopup(
-        `
-        <b>OD Flow</b><br>
-        Mode: ${d.travel_mode}<br>
-        ${useLinked ? "Linked" : "Unlinked"} count: ${count}
-        `
-      );
-
       path.addTo(layers.od);
     });
+
   }
 
   function recenterMap() {
