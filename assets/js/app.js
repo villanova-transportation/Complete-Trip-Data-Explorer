@@ -198,10 +198,27 @@ let currentViewBounds = null;
     );
 
     odData.forEach(d => {
-      if (month && d.month !== month) return;
+      odData.forEach(d => {
+        if (month && d.month !== month) return;
 
-      const count = useLinked ? d.linked_count : d.unlinked_count;
-      if (!count || count <= 0) return;
+        const {
+          o_lat, o_lon,
+          d_lat, d_lon
+        } = d;
+
+        // 🔴 核心：坐标合法性检查
+        if (
+          !Number.isFinite(o_lat) ||
+          !Number.isFinite(o_lon) ||
+          !Number.isFinite(d_lat) ||
+          !Number.isFinite(d_lon)
+        ) {
+          console.warn("Skip OD with invalid coords:", d);
+          return;
+        }
+
+        const count = useLinked ? d.linked_count : d.unlinked_count;
+        if (!count || count <= 0) return;
 
       const oLat = d.o_lat;
       const oLon = d.o_lon;
