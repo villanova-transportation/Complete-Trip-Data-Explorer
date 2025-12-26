@@ -50,12 +50,13 @@ body{
 /* ===== Top Bar ===== */
 .top-bar {
   height: var(--topbar-h);
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+
   padding: 0 18px;
-  background:var(--nova-deep);
-  color:#fff;
+  background: var(--nova-deep);
+  color: #fff;
 }
 .lab-wordmark{ font-size:16px; font-weight:800; }
 .lab-wordmark .nova{ color:#fff; }
