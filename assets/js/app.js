@@ -367,7 +367,7 @@ let currentViewBounds = null;
      Load sample JSON
   ========================= */
   async function loadSampleTrips() {
-    const res = await fetch("data/samples/samples_weber2central.json");
+    const res = await fetch("data/samples/samples_center2ski.json");
     if (!res.ok) throw new Error("Failed to load samples.json");
     const json = await res.json();
     return json.samples;
