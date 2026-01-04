@@ -110,6 +110,7 @@ UI complexity.
 ## Attribution
 
 Developed by **Ruohan Li**  
+PhD Candidate, Graduate Research Assistant
 NovaMobility Lab, Villanova University
 
 If you use or adapt this explorer for presentations or demonstrations,
