@@ -166,14 +166,11 @@ let currentViewBounds = null;
           color,
           weight: 3,
           opacity: 0.85
-        })
+        }).addTo(group).bringToFront();
         line.on("click", (e) => {
           L.DomEvent.stopPropagation(e);   // 🔴 关键
           highlightLinkedTrip(lt.linked_trip_id);
         });
-          // .addTo(layers.tripRoute)
-          .addTo(group)
-          .bringToFront();
 
         if (!bounds) bounds = line.getBounds();
         else bounds.extend(line.getBounds());
@@ -256,7 +253,7 @@ let currentViewBounds = null;
       useLinked = true
     } = options;
 
-    layers.od.clearLayers();
+    layers.odFlow.clearLayers();
 
     const maxCount = Math.max(
       1,
@@ -502,7 +499,7 @@ let currentViewBounds = null;
       odVisible = !odVisible;
 
       if (!odVisible) {
-        layers.od.clearLayers();
+        layers.odFlow.clearLayers();
         return;
       }
 
