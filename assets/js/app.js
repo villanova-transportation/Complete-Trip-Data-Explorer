@@ -61,120 +61,184 @@ let currentViewBounds = null;
      Core layers
   ========================= */
   const layers = {
-    od: L.layerGroup().addTo(map),
+    odPolygon: L.layerGroup().addTo(map),  // 🆕
+    odFlow: L.layerGroup().addTo(map),     // 🆕
     tripRoute: L.layerGroup().addTo(map),
     accessEgress: L.layerGroup().addTo(map),
     tdi: L.geoJSON(null).addTo(map)
   };
   let samplesVisible = true;
+  /* =========================
+     Draw OD
+  ========================= */
+  function drawODPolygon(od) {
+    layers.odPolygon.clearLayers();
+
+    if (!od?.origin?.geometry || !od?.destination?.geometry) return;
+
+    const originStyle = {
+      color: "#2563eb",        // blue
+      weight: 2,
+      fillColor: "#2563eb",
+      fillOpacity: 0.15
+    };
+
+    const destStyle = {
+      color: "#dc2626",        // red
+      weight: 2,
+      fillColor: "#dc2626",
+      fillOpacity: 0.15
+    };
+
+    L.geoJSON(od.origin.geometry, {
+      style: originStyle
+    })
+      .bindPopup("Origin Tract")
+      .addTo(layers.odPolygon);
+
+    L.geoJSON(od.destination.geometry, {
+      style: destStyle
+    })
+      .bindPopup("Destination Tract")
+      .addTo(layers.odPolygon);
+  }
 
   /* =========================
      Draw sample trips
   ========================= */
-  function drawSampleTrips(samples) {
+  let activeLinkedTripId = null;
+  const linkedTripLayers = new Map();   // linked_trip_id → LayerGroup
+
+  function drawSampleTrips(linkedTrips) {
     layers.tripRoute.clearLayers();
+    linkedTripLayers.clear();
 
     let bounds = null;
 
-    samples.forEach(s => {
-      if (!s.route || s.route.length < 2) return;
-      // ================
-      // 1. 画路线
-      // ================
-      const color =
-        s.mode === "rail"
-          ? "#e23c1bff"
-          : s.mode === "bus"
-          ? "rgba(37, 166, 235, 1)"
-          : s.mode === "car"
-          ? "#391b57ff"
-          : s.mode === "walk_bike"
-          ? "#15c856ff"
-          : "#6b7280";
+    linkedTrips.forEach(lt => {
+      const group = L.layerGroup().addTo(layers.tripRoute);
+      linkedTripLayers.set(lt.linked_trip_id, group);
 
-      const line = L.polyline(s.route, {
-        color,
-        weight: 3,
-        opacity: 0.9
-      })
-        .addTo(layers.tripRoute)
-        .bringToFront();
-      // ================
-      // 2. 起点
-      // ================
-      if (s.origin?.lat && s.origin?.lon) {
-        L.circleMarker([s.origin.lat, s.origin.lon], {
-          radius: 6,
-          color: "#ef4444",       // red
+      // 1) origin marker
+      if (lt.origin && Number.isFinite(Number(lt.origin.lat)) && Number.isFinite(Number(lt.origin.lon))) {
+        L.circleMarker([Number(lt.origin.lat), Number(lt.origin.lon)], {
+          radius: 7,
+          color: "#ef4444",
           fillColor: "#ef4444",
           fillOpacity: 1
-        })
-        .bindPopup("Origin")
-        .addTo(layers.tripRoute);
+        }).bindPopup("Origin").addTo(group);
       }
 
-      // ================
-      // 3. 终点
-      // ================
-      if (s.destination?.lat && s.destination?.lon) {
-        L.circleMarker([s.destination.lat, s.destination.lon], {
-          radius: 6,
-          color: "#22c55e",       // green
+      // 2) destination marker
+      if (lt.destination && Number.isFinite(Number(lt.destination.lat)) && Number.isFinite(Number(lt.destination.lon))) {
+        L.circleMarker([Number(lt.destination.lat), Number(lt.destination.lon)], {
+          radius: 7,
+          color: "#22c55e",
           fillColor: "#22c55e",
           fillOpacity: 1
-        })
-        .bindPopup("Destination")
-        .addTo(layers.tripRoute);
+        }).bindPopup("Destination").addTo(group);
       }
 
-      // ================
-      // 4. access 换乘站
-      // ================
-      if (s.access?.stop_id && s.access?.stop_name) {
-        const stop = layers.tripRoute; // layer
-          
-        // 如果 CSV 里没有 lat/lon，需要你提前给 access 加上坐标
-        if (s.access.lat && s.access.lon) {
-          L.circleMarker([s.access.lat, s.access.lon], {
-            radius: 5,
-            color: "#3b82f6",
-            fillColor: "#3b82f6",
-            fillOpacity: 0.9
-          })
-          .bindPopup(`Access Stop<br>${s.access.stop_name}`)
-          .addTo(layers.tripRoute);
-        }
-      }
+      // 3) legs
+      (lt.legs || []).forEach((leg) => {
+        if (!leg.route || leg.route.length < 2) return;
 
-      // ================
-      // 5. egress 换乘站
-      // ================
-      if (s.egress?.stop_id && s.egress?.stop_name) {
-        if (s.egress.lat && s.egress.lon) {
-          L.circleMarker([s.egress.lat, s.egress.lon], {
-            radius: 5,
-            color: "#a855f7",
-            fillColor: "#a855f7",
-            fillOpacity: 0.9
-          })
-          .bindPopup(`Egress Stop<br>${s.egress.stop_name}`)
-          .addTo(layers.tripRoute);
-        }
-      }
+        const color =
+          leg.mode === "rail" ? "#e23c1bff"
+          : leg.mode === "bus" ? "rgba(37,166,235,1)"
+          : leg.mode === "car" ? "#391b57ff"
+          : leg.mode === "walk_bike" ? "#15c856ff"
+          : "#6b7280";
 
-      // ================
-      // 6. 累积 bounds
-      // ================
-      if (!bounds) bounds = line.getBounds();
-      else bounds.extend(line.getBounds());
+        const line = L.polyline(leg.route, {
+          color,
+          weight: 3,
+          opacity: 0.85
+        }).addTo(group).bringToFront();
+
+        line.on("click", (e) => {
+          L.DomEvent.stopPropagation(e);
+          highlightLinkedTrip(lt.linked_trip_id);
+        });
+
+        if (!bounds) bounds = line.getBounds();
+        else bounds.extend(line.getBounds());
+      });
+
+      // 4) transfers  ✅（蓝色虚线边框）
+      (lt.transfers || []).forEach((t, i) => {
+        const lat = Number(t.lat) + 0.00015;
+        const lon = Number(t.lon) + 0.00015;
+        if (!Number.isFinite(lat) || !Number.isFinite(lon)) return;
+
+        const transferMarker = L.circleMarker([lat, lon], {
+          radius: 7,
+          color: "#2563eb",
+          weight: 2,
+          dashArray: "4,3",
+          fillColor: "#bfdbfe",
+          fillOpacity: 0.9
+        }).bindPopup(`Transfer ${i + 1}`).addTo(group);
+
+        transferMarker.isTransfer = true;
+        transferMarker.bringToFront();
+      });
     });
 
-    // ✅ 只在这里处理 bounds
+    // ✅ 一定要放在 forEach 外面
     if (bounds) {
-      currentViewBounds = bounds;          // 🔑 保存当前数据视角
+      currentViewBounds = bounds;
       map.fitBounds(bounds, { padding: [40, 40] });
     }
-    }
+  }
+
+
+  function highlightLinkedTrip(targetId) {
+    activeLinkedTripId = targetId;
+
+    linkedTripLayers.forEach((group, id) => {
+      group.eachLayer(layer => {
+        if (id === targetId) {
+          // 高亮
+          if (layer.setStyle) {
+            layer.setStyle({ opacity: 1, weight: 4 });
+          }
+          if (layer.setRadius) {
+            layer.setRadius(8);
+          }
+        } else {
+          // 灰化
+          if (layer.setStyle) {
+            layer.setStyle({ opacity: 0.15, weight: 2 });
+          }
+          if (layer.setRadius) {
+            if (layer.isTransfer) {
+              layer.setRadius(id === targetId ? 9 : 6);
+            } else {
+              layer.setRadius(id === targetId ? 8 : 4);
+            }
+          }
+        }
+      });
+    });
+  }
+  map.on("click", () => {
+    activeLinkedTripId = null;
+    linkedTripLayers.forEach(group => {
+      group.eachLayer(layer => {
+        if (layer.setStyle) {
+          layer.setStyle({ opacity: 0.85, weight: 3 });
+        }
+        if (layer.setRadius) {
+          if (layer.isTransfer) {
+            layer.setRadius(7);
+          } else {
+            layer.setRadius(6);
+          }
+        }
+      });
+    });
+  });
   function toggleSamples() {
     samplesVisible = !samplesVisible;
 
@@ -184,13 +248,21 @@ let currentViewBounds = null;
       layers.tripRoute.removeFrom(map);
     }
   }
+  function filterTripsByOD(trips, originTract, destinationTract) {
+    if (!originTract || !destinationTract) return [];
+
+    return trips.filter(t =>
+      t.origin_tract === originTract &&
+      t.destination_tract === destinationTract
+    );
+  }
   function drawODFlows(odData, options = {}) {
     const {
       month = null,
       useLinked = true
     } = options;
 
-    layers.od.clearLayers();
+    layers.odFlow.clearLayers();
 
     const maxCount = Math.max(
       1,
@@ -260,7 +332,7 @@ let currentViewBounds = null;
         ${useLinked ? "Linked" : "Unlinked"} count: ${count}
       `);
 
-      path.addTo(layers.od);
+      path.addTo(layers.odFlow);
     });
 
   }
@@ -367,10 +439,10 @@ let currentViewBounds = null;
      Load sample JSON
   ========================= */
   async function loadSampleTrips() {
-    const res = await fetch("data/samples/samples.json");
+    const res = await fetch("data/samples/samples_center2air.json");
     if (!res.ok) throw new Error("Failed to load samples.json");
     const json = await res.json();
-    return json.samples;
+    return json.linked_trips;   // 🔴 CHANGED
   }
   async function loadODFlows() {
     const res = await fetch("data/OD/od_dashboard_topk.json");
@@ -390,6 +462,20 @@ let currentViewBounds = null;
         else map.removeLayer(layer);
       });
     });
+    
+  document.getElementById("originTract").addEventListener("change", applyODFilter);
+  document.getElementById("destinationTract").addEventListener("change", applyODFilter);
+
+  function applyODFilter() {
+    const o = document.getElementById("originTract").value;
+    const d = document.getElementById("destinationTract").value;
+
+    if (!o || !d) return;
+
+    const filtered = filterTripsByOD(allTrips, o, d);
+    drawSampleTrips(filtered);
+  }
+
 
   /* =========================
      Init
@@ -415,14 +501,18 @@ let currentViewBounds = null;
 
     // ===== Load samples =====
     try {
-      const samples = await loadSampleTrips();
-      drawSampleTrips(samples);
+      const res = await fetch("data/samples/samples_center2air.json");
+      const json = await res.json();
+
+      drawODPolygon(json.od);                 // 🆕 新增
+      drawSampleTrips(json.linked_trips);     // 原逻辑
+
     } catch (e) {
       console.error("loadSampleTrips failed", e);
     }
-    document.querySelector('[data-view="samples"]').addEventListener("click", () => {
-      toggleSamples();
-    });
+    // document.querySelector('[data-view="samples"]').addEventListener("click", () => {
+    //   toggleSamples();
+    // });
 
     let odVisible = false;
     let cachedOD = null;
@@ -431,7 +521,7 @@ let currentViewBounds = null;
       odVisible = !odVisible;
 
       if (!odVisible) {
-        layers.od.clearLayers();
+        layers.odFlow.clearLayers();
         return;
       }
 
@@ -445,8 +535,8 @@ let currentViewBounds = null;
       });
     }
     document
-      .querySelector('[data-view="od"]')
-      .addEventListener("click", toggleOD);
+      // .querySelector('[data-view="od"]')
+      // .addEventListener("click", toggleOD);
 
   }
 

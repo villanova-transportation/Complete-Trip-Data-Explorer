@@ -15,7 +15,7 @@ html, body {
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
-  background:#fff;
+  background:#eef2f8;
   color:var(--text);
   line-height:1.55;
 }
@@ -47,6 +47,17 @@ body{
 .primary-btn:hover{ background:#133b8a; }
 .landing-footer{ margin-top:60px; font-size:14px; color:var(--muted); }
 
+#app-shell {
+  height: 100%;          /* ← 关键 */
+  margin: 4px;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+
+  display: flex;
+  flex-direction: column;
+}
 /* ===== Top Bar ===== */
 .top-bar {
   height: var(--topbar-h);
@@ -54,13 +65,17 @@ body{
   align-items: center;
   justify-content: space-between;
 
-  padding: 0px 18px;
+  padding: 0px 10px;
   background: var(--nova-deep);
   color: #fff;
 }
 .lab-wordmark {
+  display: flex;              /* 🔑 关键 */
+  align-items: baseline;      /* 🔑 不同字号对齐 */
+  gap: 6px;
+
   font-weight: 800;
-  white-space: nowrap;
+  white-space: nowrap;        /* 禁止任何换行 */
 }
 
 .lab-wordmark .brand {
@@ -71,7 +86,13 @@ body{
   font-size: 18px;
   opacity: 0.95;
 }
-
+.lab-wordmark .page-subtitle {
+  font-size: 12px;        /* 更小 */
+  font-weight: 400;      /* 不加粗 */
+  color: #cfe3ff;
+  opacity: 0.75;         /* 再弱一点 */
+  white-space: nowrap;
+}
 .lab-wordmark .sep {
   margin: 0 6px;
   opacity: 0.7;
@@ -85,7 +106,7 @@ body{
 
 .villanova-logo {
   display: block; 
-  height: 38px;
+  height: 34px;
   padding: 5px;     /* 关键：增大内边距 */
   opacity: .95;
   border-radius: 6px;
@@ -94,20 +115,33 @@ body{
 
 /* ===== Layout ===== */
 #layout {
+  flex: 1; 
   display: flex;
-  height: calc(100vh - var(--topbar-h));
+  /* padding: 12px;                 ✅ 加这一行 */
+  box-sizing: border-box;
+  min-height: 0; 
+}
+/* ==================== */
+/* ===== SideBar ===== */
+/* ==================== */
+.sidebar-title {
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #0A2A66;
 }
 
 #sidebar {
-  width: 260px;
-  min-width: 240px;
-  padding: 0;
+  width: 280px;        /* 🔥 给一个明确锚点 */
+  min-width: 280px;
+  flex-shrink: 0;
+  background: #fff;
+
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #e5e7eb;
 }
 .sidebar-top {
-  padding: 10px 12px;
+  padding: 6px 8px;
   border-bottom: 1px solid #eef1f7;
   background: #fafbff;
 }
@@ -115,6 +149,27 @@ body{
   position: sticky;
   top: 0;
   z-index: 10;
+}
+
+.sidebar-content {
+  flex: 1 1 auto;        /* 🔥 吃掉剩余高度 */
+  overflow-y: auto;      /* 只有这里滚 */
+  padding: 8px 8px;
+}
+
+.sidebar-footer {
+  margin-top: auto;  
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-top: 1px solid #eef1f7;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 11px;
+  color: #444;
+  background: #fafbff;
 }
 
 .view-grid {
@@ -145,17 +200,6 @@ body{
   display: flex;
   flex-direction: column;
   gap: 6px;
-}
-.sidebar-bottom {
-  padding: 14px 12px;
-  overflow-y: auto;
-}
-
-.sidebar-title {
-  font-size: 13px;
-  font-weight: 800;
-  margin-bottom: 10px;
-  color: #0A2A66;
 }
 
 .lens-btn {
@@ -428,7 +472,7 @@ select:focus{
 }
 /* ===== Basemap Toggle (Sidebar Bottom) ===== */
 .basemap-toggle {
-  margin-top: auto;              /* 🔥 推到底部 */
+  flex-shrink: 0;               /* 🔥 不被压缩 */
   padding: 8px 10px;
   border-top: 1px solid #eef1f7;
 
@@ -437,8 +481,10 @@ select:focus{
   gap: 6px;
 
   font-size: 11px;
-  color: #555;
+  color: #444;
+  background: #fafbff;
 }
+
 
 .basemap-toggle .label {
   margin-right: 4px;
