@@ -8,9 +8,9 @@ let currentViewBounds = null;
   const map = L.map("map", { zoomControl: true })
     .setView([40.758, -111.89], 12);
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap contributors"
-  }).addTo(map);
+  // L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  //   attribution: "© OpenStreetMap contributors"
+  // }).addTo(map);
 
   const baseMaps = {
     light: L.tileLayer(
