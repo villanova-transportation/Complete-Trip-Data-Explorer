@@ -10,20 +10,20 @@
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   />
-</head><aside id="sidebar">
+</head>
 
 <body>
+  <!-- ===== App Shell ===== -->
   <div id="app-shell">
-    <!-- Top Bar (Villanova blue + NovaMobility wordmark + Villanova V) -->
-    <header class="top-bar">
 
+    <!-- ===== Top Bar ===== -->
+    <header class="top-bar">
       <div class="left-group">
         <div class="lab-wordmark">
-          <span<aside id="sidebar"><aside id="sidebar"></aside> class="brand">
+          <span class="brand">
             <span class="nova">Nova</span><span class="mobility">Mobility</span> Lab
           </span>
           <span class="sep">|</span>
-
           <div class="title-block">
             <span class="page-title">Salt Lake City Complete Trip Data</span>
             <span class="page-subtitle">
@@ -38,140 +38,97 @@
           src="img/Villanova_V_logo.jpg"
           alt="Villanova University"
           class="villanova-logo"
-        >
+        />
       </div>
-  </header>
-    
+    </header>
+
+    <!-- ===== Main Layout ===== -->
     <div id="layout">
-      <!-- Sidebar -->
+
+      <!-- ===== Sidebar ===== -->
       <aside id="sidebar">
+
+        <!-- 滚动内容区 -->
         <div class="sidebar-content">
-          <!-- ===== TOP: View Selector ===== -->
-          <!-- <div class="sidebar-top">
-            <div class="view-grid">
-              <button class="view-pill active" data-view="samples">Samples</button>
-              <button class="view-pill" data-view="od">OD</button>
-              <button class="view-pill">Access</button>
-              <button class="view-pill">Egress</button>
-              <button class="view-pill">Network</button>
-              <button class="view-pill">Speed</button>
-              <button class="view-pill">Application</button>
-            </div>
-          </div> -->
 
-          <!-- ===== BOTTOM: Filters ===== -->
-          <div class="sidebar-bottom">
+          <h4 class="sidebar-title">Filters</h4>
 
-            <h4 class="sidebar-title">Filters</h4>
-
-            <div class="form-row">
-              <label>Month</label>
-              <select>
-                <option>All</option>
-                <option>2020-01</option>
-                <option>2020-02</option>
-                <option>2020-03</option>
-                <option>2020-04</option>
-                <option>2020-05</option>
-                <option>2020-06</option>
-                <option>2020-07</option>
-                <option>2020-08</option>
-                <option>2020-09</option>
-                <option>2020-10</option>
-                <option>2020-11</option>
-                <option>2020-12</option>
-              </select>
-            </div>
-            
-            <div class="form-row">
-              <label>Origin Census Tract</label>
-              <select id="originTract">
-                <option value="">Select origin…</option>
-              </select>
-            </div>
-
-            <div class="form-row">
-              <label>Destination Census Tract</label>
-              <select id="destinationTract">
-                <option value="">Select destination…</option>
-              </select>
-            </div>
-
-            <div class="form-row">
-              <label>Mode</label>
-
-              <div class="mode-list">
-                <label class="check-item">
-                  <input type="checkbox" checked>
-                  <span>Car</span>
-                </label>
-
-                <label class="check-item">
-                  <input type="checkbox" checked>
-                  <span>Bus</span>
-                </label>
-
-                <label class="check-item">
-                  <input type="checkbox" checked>
-                  <span>Rail</span>
-                </label>
-
-                <label class="check-item">
-                  <input type="checkbox" checked>
-                  <span>Walk / Bike</span>
-                </label>
-              </div>
-              
-              <label>Facilities</label>
-              <div class="facility-list">
-                <label class="check-item">
-                  <input type="checkbox" data-layer="bus_stop">
-                  Bus Stop
-                </label>
-                <label class="check-item">
-                  <input type="checkbox" data-layer="bus_route">
-                  Bus Route
-                </label>
-                <label class="check-item">
-                  <input type="checkbox" data-layer="rail_stop">
-                  Rail Stop
-                </label>
-                <label class="check-item">
-                  <input type="checkbox" data-layer="rail_route">
-                  Rail Route
-                </label>
-              </div>
-
+          <div class="form-row">
+            <label>Month</label>
+            <select>
+              <option>All</option>
+              <option>2020-01</option>
+              <option>2020-02</option>
+              <option>2020-03</option>
+              <option>2020-04</option>
+              <option>2020-05</option>
+              <option>2020-06</option>
+              <option>2020-07</option>
+              <option>2020-08</option>
+              <option>2020-09</option>
+              <option>2020-10</option>
+              <option>2020-11</option>
+              <option>2020-12</option>
+            </select>
           </div>
-          
-          <!-- Basemap toggle (bottom) -->
-          <div class="sidebar-footer">
-            <span class="label">Map</span>
-            <button class="bm-btn active" data-basemap="light">Light</button>
-            <button class="bm-btn" data-basemap="dark">Dark</button>
+
+          <div class="form-row">
+            <label>Origin Census Tract</label>
+            <select id="originTract">
+              <option value="">Select origin…</option>
+            </select>
           </div>
+
+          <div class="form-row">
+            <label>Destination Census Tract</label>
+            <select id="destinationTract">
+              <option value="">Select destination…</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label>Mode</label>
+            <div class="mode-list">
+              <label class="check-item"><input type="checkbox" checked> Car</label>
+              <label class="check-item"><input type="checkbox" checked> Bus</label>
+              <label class="check-item"><input type="checkbox" checked> Rail</label>
+              <label class="check-item"><input type="checkbox" checked> Walk / Bike</label>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label>Facilities</label>
+            <div class="facility-list">
+              <label class="check-item"><input type="checkbox"> Bus Stop</label>
+              <label class="check-item"><input type="checkbox"> Bus Route</label>
+              <label class="check-item"><input type="checkbox"> Rail Stop</label>
+              <label class="check-item"><input type="checkbox"> Rail Route</label>
+            </div>
+          </div>
+
         </div>
+
+        <!-- 固定底部 -->
+        <div class="sidebar-footer">
+          <span class="label">Map</span>
+          <button class="bm-btn active">Light</button>
+          <button class="bm-btn">Dark</button>
+        </div>
+
       </aside>
 
-
-
-      <!-- Map -->
+      <!-- ===== Map ===== -->
       <main id="map-wrap">
         <div id="map"></div>
-
         <div id="mapStatus" class="map-status">
           Ready · Sample data loaded
         </div>
-      </main> 
+      </main>
+
     </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <script src="assets/js/app.js"></script>
-
-
-
 </body>
 </html>
- 
