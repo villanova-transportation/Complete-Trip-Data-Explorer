@@ -569,7 +569,7 @@ select:focus{
 .map-legend {
   position: absolute;
   right: 16px;
-  bottom: 24px;
+  bottom: 16px;
   z-index: 1000;  
   min-width: 160px;
   background: #fff;
