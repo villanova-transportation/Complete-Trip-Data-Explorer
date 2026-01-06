@@ -1,6 +1,6 @@
 {
   "schema": "nova.complete_trip.sample.v2",
-  "generated_at": "2026-01-05T18:51:01.339991Z",
+  "generated_at": "2026-01-06T18:56:49.756828Z",
   "od": {
     "origin": {
       "tract_id": "49035114000",
@@ -1914,12 +1914,14 @@
       "origin": {
         "lon": -111.89,
         "lat": 40.76,
-        "geohash": "9x0rvuc"
+        "geohash": "9x0rvuc",
+        "start_time": "2020-01-17T08:36:43"
       },
       "destination": {
         "lon": -111.96,
         "lat": 40.77,
-        "geohash": "9x0ruqh"
+        "geohash": "9x0ruqh",
+        "end_time": "2020-01-17T09:12:23"
       },
       "transfers": [
         {
@@ -2867,6 +2869,7 @@
               -111.8939441
             ]
           ],
+          "start_time": "2020-01-17T08:36:43",
           "duration_min": 16.616666666666667,
           "network_distance_km": 1.9,
           "route_distance_km": null,
@@ -2893,7 +2896,8 @@
             "tour_id": "04gqGyJPoo5w1qxRzZQb0belKK99Q650r7lPAzw5NvZD7laLqJl9E9-LdOyw5ObXdK5M",
             "purpose": "OBO",
             "weight": 27.08793832418293
-          }
+          },
+          "leg_index": 0
         },
         {
           "id": "04gqGyJPoo5w1qxRzZQb0belKK99Q650r7lPAzw5NvZD7laLqJl9E9-EONzV6ZOLzjex",
@@ -2980,6 +2984,7 @@
               -111.924632
             ]
           ],
+          "start_time": "2020-01-17T08:56:20",
           "duration_min": 15.466666666666667,
           "network_distance_km": 2.26,
           "route_distance_km": null,
@@ -3006,7 +3011,8 @@
             "tour_id": "04gqGyJPoo5w1qxRzZQb0belKK99Q650r7lPAzw5NvZD7laLqJl9E9-LdOyw5ObXdK5M",
             "purpose": "OBO",
             "weight": 102.74635619099055
-          }
+          },
+          "leg_index": 1
         },
         {
           "id": "04gqGyJPoo5w1qxRzZQb0belKK99Q650r7lPAzw5NvZD7laLqJl9E9-aP2Dn7x04lA0v",
@@ -3181,6 +3187,7 @@
               -111.954665
             ]
           ],
+          "start_time": "2020-01-17T09:12:23",
           "duration_min": 10.566666666666666,
           "network_distance_km": 4.55,
           "route_distance_km": null,
@@ -3207,7 +3214,8 @@
             "tour_id": "04gqGyJPoo5w1qxRzZQb0belKK99Q650r7lPAzw5NvZD7laLqJl9E9-LdOyw5ObXdK5M",
             "purpose": "OBO",
             "weight": 14.580606565024825
-          }
+          },
+          "leg_index": 2
         }
       ],
       "weight": 102.74635619099055
@@ -3217,12 +3225,14 @@
       "origin": {
         "lon": -111.89,
         "lat": 40.76,
-        "geohash": "9x0rvg3"
+        "geohash": "9x0rvg3",
+        "start_time": "2020-01-17T06:46:28"
       },
       "destination": {
         "lon": -111.98,
         "lat": 40.78,
-        "geohash": "9x225b9"
+        "geohash": "9x225b9",
+        "end_time": "2020-01-17T07:01:20"
       },
       "transfers": [
         {
@@ -3413,6 +3423,7 @@
               -111.8921561
             ]
           ],
+          "start_time": "2020-01-17T06:46:28",
           "duration_min": 10.966666666666667,
           "network_distance_km": 0.47,
           "route_distance_km": null,
@@ -3439,7 +3450,8 @@
             "tour_id": "J9Voa2Rz5ery2ZVpwqvZpWKyDZYVy9AD1n62zAo5n7Rzv704Z5bjOb-ogw2vVjRPEy14",
             "purpose": "OBO",
             "weight": 33.55850015528093
-          }
+          },
+          "leg_index": 0
         },
         {
           "id": "J9Voa2Rz5ery2ZVpwqvZpWKyDZYVy9AD1n62zAo5n7Rzv704Z5bjOb-YBz4aoQLgBMpE",
@@ -3558,6 +3570,7 @@
               -111.982117
             ]
           ],
+          "start_time": "2020-01-17T07:01:20",
           "duration_min": 15.05,
           "network_distance_km": 5.99,
           "route_distance_km": null,
@@ -3584,7 +3597,8 @@
             "tour_id": "J9Voa2Rz5ery2ZVpwqvZpWKyDZYVy9AD1n62zAo5n7Rzv704Z5bjOb-ogw2vVjRPEy14",
             "purpose": "OBO",
             "weight": 102.74635619099055
-          }
+          },
+          "leg_index": 1
         }
       ],
       "weight": 102.74635619099055
@@ -3592,23 +3606,236 @@
     {
       "linked_trip_id": "LZnPYAdVz6BV5Z0EzyPVgDpw9YVnaNKwyZMEv6Q59WApAbORXM2e97-NGraL5avpoRgqxPGDr6ZN6GgBGep4",
       "origin": {
-        "lon": -111.94,
-        "lat": 40.77,
-        "geohash": "9x0ruy3"
+        "lon": -111.9,
+        "lat": 40.75,
+        "geohash": "9x0rvdk",
+        "start_time": "2020-01-28T18:16:25"
       },
       "destination": {
-        "lon": -111.94,
+        "lon": -111.95,
         "lat": 40.77,
-        "geohash": "9x0ruy2"
+        "geohash": "9x0rutc",
+        "end_time": "2020-01-28T18:31:35"
       },
       "transfers": [
         {
           "lat": 40.77,
-          "lon": -111.95,
-          "geohash": "9x0rutc"
+          "lon": -111.94,
+          "geohash": "9x0ruy2"
         }
       ],
       "legs": [
+        {
+          "id": "LZnPYAdVz6BV5Z0EzyPVgDpw9YVnaNKwyZMEv6Q59WApAbORXM2e97-KXVyydwRWNz70",
+          "mode": "rail",
+          "route": [
+            [
+              40.749958,
+              -111.896918
+            ],
+            [
+              40.750058,
+              -111.896818
+            ],
+            [
+              40.749958,
+              -111.896918
+            ],
+            [
+              40.741775999999994,
+              -111.896885
+            ],
+            [
+              40.741775999999994,
+              -111.896885
+            ],
+            [
+              40.723991,
+              -111.896992
+            ],
+            [
+              40.723991,
+              -111.896992
+            ],
+            [
+              40.723484,
+              -111.920023
+            ],
+            [
+              40.723484,
+              -111.920023
+            ],
+            [
+              40.723584,
+              -111.919923
+            ],
+            [
+              40.723484,
+              -111.920023
+            ],
+            [
+              40.723584,
+              -111.919923
+            ],
+            [
+              40.723484,
+              -111.920023
+            ],
+            [
+              40.724700999999996,
+              -111.896961
+            ],
+            [
+              40.724700999999996,
+              -111.896961
+            ],
+            [
+              40.742483,
+              -111.89688100000001
+            ],
+            [
+              40.742483,
+              -111.89688100000001
+            ],
+            [
+              40.750721999999996,
+              -111.896888
+            ],
+            [
+              40.750721999999996,
+              -111.896888
+            ],
+            [
+              40.755956999999995,
+              -111.89119600000001
+            ],
+            [
+              40.755956999999995,
+              -111.89119600000001
+            ],
+            [
+              40.759435999999994,
+              -111.891171
+            ],
+            [
+              40.759435999999994,
+              -111.891171
+            ],
+            [
+              40.763754999999996,
+              -111.891171
+            ],
+            [
+              40.763754999999996,
+              -111.891171
+            ],
+            [
+              40.768117,
+              -111.891181
+            ],
+            [
+              40.768117,
+              -111.891181
+            ],
+            [
+              40.769253,
+              -111.895421
+            ],
+            [
+              40.769253,
+              -111.895421
+            ],
+            [
+              40.76924399999999,
+              -111.901246
+            ],
+            [
+              40.76924399999999,
+              -111.901246
+            ],
+            [
+              40.77148699999999,
+              -111.90529500000001
+            ],
+            [
+              40.77148699999999,
+              -111.90529500000001
+            ],
+            [
+              40.771401999999995,
+              -111.914586
+            ],
+            [
+              40.771401999999995,
+              -111.914586
+            ],
+            [
+              40.771367999999995,
+              -111.92385900000001
+            ],
+            [
+              40.771367999999995,
+              -111.92385900000001
+            ],
+            [
+              40.771398999999995,
+              -111.93360200000001
+            ],
+            [
+              40.771398999999995,
+              -111.93360200000001
+            ],
+            [
+              40.771499,
+              -111.933502
+            ],
+            [
+              40.771499,
+              -111.933502
+            ],
+            [
+              40.771671,
+              -111.932604
+            ],
+            [
+              40.771671,
+              -111.932604
+            ],
+            [
+              40.771509,
+              -111.934373
+            ]
+          ],
+          "start_time": "2020-01-28T18:16:25",
+          "duration_min": 10.066666666666666,
+          "network_distance_km": 9.87,
+          "route_distance_km": null,
+          "origin": {
+            "lon": -111.9,
+            "lat": 40.75,
+            "geohash": "9x0rvdk"
+          },
+          "destination": {
+            "lon": -111.94,
+            "lat": 40.77,
+            "geohash": "9x0ruy2"
+          },
+          "access": {
+            "stop_id": null,
+            "stop_name": "900 South Station"
+          },
+          "egress": {
+            "stop_id": null,
+            "stop_name": "Power Station"
+          },
+          "meta": {
+            "linked_trip_id": "LZnPYAdVz6BV5Z0EzyPVgDpw9YVnaNKwyZMEv6Q59WApAbORXM2e97-NGraL5avpoRgqxPGDr6ZN6GgBGep4",
+            "tour_id": "LZnPYAdVz6BV5Z0EzyPVgDpw9YVnaNKwyZMEv6Q59WApAbORXM2e97-O1w2WG2q6RROO",
+            "purpose": "OBO",
+            "weight": 71.33014954586106
+          },
+          "leg_index": 0
+        },
         {
           "id": "LZnPYAdVz6BV5Z0EzyPVgDpw9YVnaNKwyZMEv6Q59WApAbORXM2e97-9jzLbYg5KWdLY",
           "mode": "walk/bike",
@@ -4010,6 +4237,7 @@
               -111.952594
             ]
           ],
+          "start_time": "2020-01-28T18:31:35",
           "duration_min": 13.183333333333334,
           "network_distance_km": 0.8,
           "route_distance_km": null,
@@ -4036,216 +4264,8 @@
             "tour_id": "LZnPYAdVz6BV5Z0EzyPVgDpw9YVnaNKwyZMEv6Q59WApAbORXM2e97-O1w2WG2q6RROO",
             "purpose": "OBO",
             "weight": 20.53347926651358
-          }
-        },
-        {
-          "id": "LZnPYAdVz6BV5Z0EzyPVgDpw9YVnaNKwyZMEv6Q59WApAbORXM2e97-KXVyydwRWNz70",
-          "mode": "rail",
-          "route": [
-            [
-              40.749958,
-              -111.896918
-            ],
-            [
-              40.750058,
-              -111.896818
-            ],
-            [
-              40.749958,
-              -111.896918
-            ],
-            [
-              40.741775999999994,
-              -111.896885
-            ],
-            [
-              40.741775999999994,
-              -111.896885
-            ],
-            [
-              40.723991,
-              -111.896992
-            ],
-            [
-              40.723991,
-              -111.896992
-            ],
-            [
-              40.723484,
-              -111.920023
-            ],
-            [
-              40.723484,
-              -111.920023
-            ],
-            [
-              40.723584,
-              -111.919923
-            ],
-            [
-              40.723484,
-              -111.920023
-            ],
-            [
-              40.723584,
-              -111.919923
-            ],
-            [
-              40.723484,
-              -111.920023
-            ],
-            [
-              40.724700999999996,
-              -111.896961
-            ],
-            [
-              40.724700999999996,
-              -111.896961
-            ],
-            [
-              40.742483,
-              -111.89688100000001
-            ],
-            [
-              40.742483,
-              -111.89688100000001
-            ],
-            [
-              40.750721999999996,
-              -111.896888
-            ],
-            [
-              40.750721999999996,
-              -111.896888
-            ],
-            [
-              40.755956999999995,
-              -111.89119600000001
-            ],
-            [
-              40.755956999999995,
-              -111.89119600000001
-            ],
-            [
-              40.759435999999994,
-              -111.891171
-            ],
-            [
-              40.759435999999994,
-              -111.891171
-            ],
-            [
-              40.763754999999996,
-              -111.891171
-            ],
-            [
-              40.763754999999996,
-              -111.891171
-            ],
-            [
-              40.768117,
-              -111.891181
-            ],
-            [
-              40.768117,
-              -111.891181
-            ],
-            [
-              40.769253,
-              -111.895421
-            ],
-            [
-              40.769253,
-              -111.895421
-            ],
-            [
-              40.76924399999999,
-              -111.901246
-            ],
-            [
-              40.76924399999999,
-              -111.901246
-            ],
-            [
-              40.77148699999999,
-              -111.90529500000001
-            ],
-            [
-              40.77148699999999,
-              -111.90529500000001
-            ],
-            [
-              40.771401999999995,
-              -111.914586
-            ],
-            [
-              40.771401999999995,
-              -111.914586
-            ],
-            [
-              40.771367999999995,
-              -111.92385900000001
-            ],
-            [
-              40.771367999999995,
-              -111.92385900000001
-            ],
-            [
-              40.771398999999995,
-              -111.93360200000001
-            ],
-            [
-              40.771398999999995,
-              -111.93360200000001
-            ],
-            [
-              40.771499,
-              -111.933502
-            ],
-            [
-              40.771499,
-              -111.933502
-            ],
-            [
-              40.771671,
-              -111.932604
-            ],
-            [
-              40.771671,
-              -111.932604
-            ],
-            [
-              40.771509,
-              -111.934373
-            ]
-          ],
-          "duration_min": 10.066666666666666,
-          "network_distance_km": 9.87,
-          "route_distance_km": null,
-          "origin": {
-            "lon": -111.9,
-            "lat": 40.75,
-            "geohash": "9x0rvdk"
           },
-          "destination": {
-            "lon": -111.94,
-            "lat": 40.77,
-            "geohash": "9x0ruy2"
-          },
-          "access": {
-            "stop_id": null,
-            "stop_name": "900 South Station"
-          },
-          "egress": {
-            "stop_id": null,
-            "stop_name": "Power Station"
-          },
-          "meta": {
-            "linked_trip_id": "LZnPYAdVz6BV5Z0EzyPVgDpw9YVnaNKwyZMEv6Q59WApAbORXM2e97-NGraL5avpoRgqxPGDr6ZN6GgBGep4",
-            "tour_id": "LZnPYAdVz6BV5Z0EzyPVgDpw9YVnaNKwyZMEv6Q59WApAbORXM2e97-O1w2WG2q6RROO",
-            "purpose": "OBO",
-            "weight": 71.33014954586106
-          }
+          "leg_index": 1
         }
       ],
       "weight": 71.33014954586106
