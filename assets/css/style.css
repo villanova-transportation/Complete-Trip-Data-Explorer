@@ -59,8 +59,12 @@ body{
   color: #fff;
 }
 .lab-wordmark {
+  display: flex;              /* 🔑 关键 */
+  align-items: baseline;      /* 🔑 不同字号对齐 */
+  gap: 6px;
+
   font-weight: 800;
-  white-space: nowrap;
+  white-space: nowrap;        /* 禁止任何换行 */
 }
 
 .lab-wordmark .brand {

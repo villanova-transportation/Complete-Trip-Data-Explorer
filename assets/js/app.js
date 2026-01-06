@@ -489,9 +489,9 @@ let currentViewBounds = null;
     } catch (e) {
       console.error("loadSampleTrips failed", e);
     }
-    document.querySelector('[data-view="samples"]').addEventListener("click", () => {
-      toggleSamples();
-    });
+    // document.querySelector('[data-view="samples"]').addEventListener("click", () => {
+    //   toggleSamples();
+    // });
 
     let odVisible = false;
     let cachedOD = null;
@@ -514,8 +514,8 @@ let currentViewBounds = null;
       });
     }
     document
-      .querySelector('[data-view="od"]')
-      .addEventListener("click", toggleOD);
+      // .querySelector('[data-view="od"]')
+      // .addEventListener("click", toggleOD);
 
   }
 

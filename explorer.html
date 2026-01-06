@@ -46,7 +46,7 @@
     <aside id="sidebar">
 
       <!-- ===== TOP: View Selector ===== -->
-      <div class="sidebar-top">
+      <!-- <div class="sidebar-top">
         <div class="view-grid">
           <button class="view-pill active" data-view="samples">Samples</button>
           <button class="view-pill" data-view="od">OD</button>
@@ -56,7 +56,7 @@
           <button class="view-pill">Speed</button>
           <button class="view-pill">Application</button>
         </div>
-      </div>
+      </div> -->
 
       <!-- ===== BOTTOM: Filters ===== -->
       <div class="sidebar-bottom">
@@ -81,7 +81,15 @@
             <option>2020-12</option>
           </select>
         </div>
-
+        
+        <div class="form-row">
+          <label>Census Tract</label>
+          <select>
+            <option value="all">All</option>
+            <option value="all">1111</option>
+            <!-- 之后你可以用 JS 动态填充 -->
+          </select>
+        </div>
         <div class="form-row">
           <label>Mode</label>
 
