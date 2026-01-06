@@ -131,8 +131,7 @@ body{
 }
 
 #sidebar {
-  margin: 12px 0 12px 12px;   /* 🔑 左 + 上下有呼吸 */
-  border-radius: 14px;
+
   background: #fff;
 
   display: flex;
