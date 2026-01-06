@@ -95,7 +95,7 @@ body{
 
 .villanova-logo {
   display: block; 
-  height: 38px;
+  height: 34px;
   padding: 5px;     /* 关键：增大内边距 */
   opacity: .95;
   border-radius: 6px;
@@ -106,7 +106,7 @@ body{
 #layout {
   display: flex;
   height: calc(100vh - var(--topbar-h));
-  padding: 12px;                 /* ✅ 加这一行 */
+  /* padding: 12px;                 ✅ 加这一行 */
   box-sizing: border-box;
 }
 /* ==================== */
@@ -120,15 +120,12 @@ body{
 }
 
 #sidebar {
-  width: 260px;
-  min-width: 240px;
-  padding: 0;
+  margin: 12px 0 12px 12px;   /* 🔑 左 + 上下有呼吸 */
+  border-radius: 14px;
+  background: #fff;
 
   display: flex;
   flex-direction: column;
-  height: 100%;                /* 🔥 必须 */
-
-  border-right: 1px solid #e5e7eb;
 }
 .sidebar-top {
   padding: 10px 12px;
