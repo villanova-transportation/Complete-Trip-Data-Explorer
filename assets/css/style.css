@@ -569,7 +569,7 @@ select:focus{
 .map-legend {
   position: absolute;
   right: 16px;
-  bottom: 16px;
+  bottom: 24px;
   z-index: 1000;  
   min-width: 160px;
   background: #fff;
@@ -615,8 +615,8 @@ select:focus{
   border-radius: 50%;
 }
 
-.dot.origin { background: #ef4444; }
-.dot.destination { background: #22c55e; }
+.dot.origin { background: #22c55e; }
+.dot.destination { background: #ef4444; }
 .dot.transfer {
   border: 2px dashed #2563eb;
   background: #bfdbfe;
