@@ -466,6 +466,20 @@ let currentViewBounds = null;
       setMapStatus(`No sample data for OD: ${o} → ${d}`, "error");
     }
   }
+
+  // ===== Sync mobile OD selectors to desktop logic =====
+  function syncODSelectors(origin, destination) {
+    const o = document.getElementById("originTract");
+    const d = document.getElementById("destinationTract");
+
+    if (!o || !d) return;
+
+    o.value = origin;
+    d.value = destination;
+
+    applyODSelection();
+  }
+    
   async function loadStatsForOD(origin, destination) {
     const filename = `${origin}_to_${destination}.stats.json`;
     const url = `data/samples/${filename}`;
@@ -757,6 +771,28 @@ let currentViewBounds = null;
 
     applyODSelection(); // 用当前下拉框默认值加载
     
+    // ===== Mobile OD selectors =====
+    const oMobile = document.getElementById("originTractMobile");
+    const dMobile = document.getElementById("destinationTractMobile");
+
+    if (oMobile && dMobile) {
+      // 把 desktop 的 options 复制给 mobile
+      oMobile.innerHTML = document.getElementById("originTract").innerHTML;
+      dMobile.innerHTML = document.getElementById("destinationTract").innerHTML;
+
+      // 默认同步当前值
+      oMobile.value = document.getElementById("originTract").value;
+      dMobile.value = document.getElementById("destinationTract").value;
+
+      oMobile.addEventListener("change", () => {
+        syncODSelectors(oMobile.value, dMobile.value);
+      });
+
+      dMobile.addEventListener("change", () => {
+        syncODSelectors(oMobile.value, dMobile.value);
+      });
+    }
+
     const menuBtn = document.getElementById("menuToggle");
     if (menuBtn) {
       menuBtn.addEventListener("click", () => {

@@ -758,3 +758,46 @@ select:focus{
     font-size: 8px;
   }
 }
+/* =========================================================
+   Mobile layout: top OD bar + map
+========================================================= */
+
+.mobile-od-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+
+  /* 隐藏左侧 sidebar */
+  #sidebar {
+    display: none;
+  }
+
+  /* 显示顶部 OD bar */
+  .mobile-od-bar {
+    display: flex;
+    gap: 12px;
+    padding: 10px 12px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .mobile-od-bar .form-row {
+    flex: 1;
+  }
+
+  /* 地图占满剩余空间 */
+  #layout {
+    padding: 0;
+  }
+
+  /* stats / legend 稍微缩小 */
+  .stats-panel {
+    max-width: 180px;
+    font-size: 11px;
+  }
+
+  .map-legend {
+    font-size: 11px;
+  }
+}
