@@ -700,31 +700,38 @@ select:focus{
 .pi-title {
   font-weight: 700;
   color: #0A2A66;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .pi-name {
   font-weight: 600;
+  margin-bottom: 4px;
 }
 
-.pi-links a {
+.pi-contact div {
+  line-height: 1.6;
+}
+
+.pi-contact a {
   color: #0A2A66;
   text-decoration: none;
+  word-break: break-all;
 }
 
-.pi-links a:hover {
+.pi-contact a:hover {
   text-decoration: underline;
 }
+
 @media (max-width: 600px) {
   .pi-block {
-    margin-top: 40px;
     font-size: 13px;
   }
 }
+
 .sidebar-attribution {
   padding: 8px 10px 10px;
   border-top: 1px solid #eef1f7;
-  font-size: 11px;
+  font-size: 8px;
   color: #555;
   background: #fafbff;
 }
@@ -748,6 +755,6 @@ select:focus{
 }
 @media (max-width: 768px) {
   .sidebar-attribution {
-    font-size: 10px;
+    font-size: 8px;
   }
 }
