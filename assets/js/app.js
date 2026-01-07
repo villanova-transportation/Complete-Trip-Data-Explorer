@@ -482,8 +482,23 @@ let currentViewBounds = null;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
-    const w = canvas.width;
-    const h = canvas.height;
+
+    // ===== DPI FIX =====
+    const dpr = window.devicePixelRatio || 1;
+    const cssWidth = canvas.clientWidth;
+    const cssHeight = canvas.clientHeight;
+
+    // Set actual pixel size
+    canvas.width = Math.round(cssWidth * dpr);
+    canvas.height = Math.round(cssHeight * dpr);
+
+    // Keep CSS size unchanged
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Logical drawing size (CSS pixels)
+    const w = cssWidth;
+    const h = cssHeight;
+
 
     ctx.clearRect(0, 0, w, h);
 
@@ -550,7 +565,13 @@ let currentViewBounds = null;
       return ((clamped - minT) / (maxT - minT)) * w;
     }
 
-    function drawVerticalLine(x, label, color, labelYOffset = 0) {
+    function drawVerticalLine(
+      x,
+      label,
+      color,
+      labelYOffset = 0,
+      align = "right"   // "right" | "left"
+    ) {
       ctx.save();
       ctx.strokeStyle = color;
       ctx.setLineDash([4, 3]);
@@ -562,9 +583,17 @@ let currentViewBounds = null;
 
       ctx.fillStyle = color;
       ctx.font = "10px sans-serif";
-      ctx.fillText(label, x + 4, padTop - 4 + labelYOffset);
+
+      const textW = ctx.measureText(label).width;
+      const textX =
+        align === "left"
+          ? x - textW - 4
+          : x + 4;
+
+      ctx.fillText(label, textX, padTop - 4 + labelYOffset);
       ctx.restore();
     }
+
 
     const xMedian = Number.isFinite(durStats.median)
       ? timeToX(durStats.median)
@@ -574,40 +603,51 @@ let currentViewBounds = null;
       ? timeToX(durStats.mean)
       : null;
 
+    ctx.font = "10px sans-serif";
+
+    const medianLabel = `Median ${durStats.median.toFixed(1)}`;
+    const meanLabel   = `Mean ${durStats.mean.toFixed(1)}`;
+
+    const medianTextW = ctx.measureText(medianLabel).width;
+    const meanTextW   = ctx.measureText(meanLabel).width;
+    const medianBox = {
+      left: xMedian + 4,
+      right: xMedian + 4 + medianTextW
+    };
+
+    const meanBox = {
+      left: xMean + 4,
+      right: xMean + 4 + meanTextW
+    };
     const LINE_GAP_PX = 12;
 
     // Mean / Median lines
-    if (xMedian !== null && xMean !== null && Math.abs(xMedian - xMean) < LINE_GAP_PX) {
-      // 重叠：label 上下错开
+    if (xMedian !== null && xMean !== null && boxesOverlap) {
+      // 情况 1：label box 重叠 → 左右分开
       drawVerticalLine(
         xMedian,
-        `Median ${durStats.median.toFixed(1)}`,
+        medianLabel,
         "#eb253cff",
-        0
+        0,
+        "right"
       );
       drawVerticalLine(
         xMean,
-        `Mean ${durStats.mean.toFixed(1)}`,
+        meanLabel,
         "#f59e0b",
-        12
+        0,
+        "left"
       );
     } else {
-      // 不重叠：正常画
+      // 情况 2：不重叠 → 正常画
       if (xMedian !== null) {
-        drawVerticalLine(
-          xMedian,
-          `Median ${durStats.median.toFixed(1)}`,
-          "#eb253cff"
-        );
+        drawVerticalLine(xMedian, medianLabel, "#eb253cff");
       }
       if (xMean !== null) {
-        drawVerticalLine(
-          xMean,
-          `Mean ${durStats.mean.toFixed(1)}`,
-          "#f59e0b"
-        );
+        drawVerticalLine(xMean, meanLabel, "#f59e0b");
       }
     }
+
 
   }
 
