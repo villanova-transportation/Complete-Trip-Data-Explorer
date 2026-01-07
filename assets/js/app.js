@@ -690,7 +690,7 @@ let currentViewBounds = null;
     // 3️⃣ Transfers
     const t = stats.segments;
     document.getElementById("statsSegments").textContent =
-      `Segments: avg ${t.avg.toFixed(1)}, max ${t.max}`;
+      `Segments: avg ${t.avg}, max ${t.max}`;
 
     // 4️⃣ Mode involvement
     const m = stats.mode_involvement;
