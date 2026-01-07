@@ -721,3 +721,33 @@ select:focus{
     font-size: 13px;
   }
 }
+.sidebar-attribution {
+  padding: 8px 10px 10px;
+  border-top: 1px solid #eef1f7;
+  font-size: 11px;
+  color: #555;
+  background: #fafbff;
+}
+
+.attr-lab {
+  font-weight: 700;
+  color: #0A2A66;
+}
+
+.attr-pi {
+  margin-top: 2px;
+}
+
+.attr-links a {
+  color: #0A2A66;
+  text-decoration: none;
+}
+
+.attr-links a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 768px) {
+  .sidebar-attribution {
+    font-size: 10px;
+  }
+}
