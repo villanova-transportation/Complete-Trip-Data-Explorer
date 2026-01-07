@@ -756,6 +756,13 @@ let currentViewBounds = null;
     // ===== Load samples =====
 
     applyODSelection(); // 用当前下拉框默认值加载
+    
+    const menuBtn = document.getElementById("menuToggle");
+    if (menuBtn) {
+      menuBtn.addEventListener("click", () => {
+        document.getElementById("sidebar").classList.toggle("open");
+      });
+    }
 
     // document.querySelector('[data-view="samples"]').addEventListener("click", () => {
     //   toggleSamples();

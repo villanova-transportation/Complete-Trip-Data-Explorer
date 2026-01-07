@@ -69,6 +69,20 @@ body{
   background: var(--nova-deep);
   color: #fff;
 }
+.menu-toggle {
+  display: none;           /* 默认 desktop 不显示 */
+  font-size: 22px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+}
+@media (max-width: 768px) {
+  .page-subtitle {
+    display: none;
+  }
+}
 .lab-wordmark {
   display: flex;              /* 🔑 关键 */
   align-items: baseline;      /* 🔑 不同字号对齐 */
@@ -140,6 +154,21 @@ body{
 
   display: flex;
   flex-direction: column;
+}
+@media (max-width: 768px) {
+  #sidebar {
+    position: absolute;
+    left: 0;
+    top: var(--topbar-h);
+    height: calc(100% - var(--topbar-h));
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 2000;
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+  }
 }
 .sidebar-top {
   padding: 6px 8px;
@@ -236,11 +265,6 @@ body{
   height:100%;
   position: relative; 
 }
-@media (max-width: 1200px) {
-  #sidebar {
-    width: 240px;
-  }
-}
 
 /* ===== Stats Panel ===== */
 .stats-panel {
@@ -259,7 +283,12 @@ body{
   color: #222;
   box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
-
+@media (max-width: 768px) {
+  .stats-panel,
+  .map-legend {
+    display: none;
+  }
+}
 .stats-title {
   font-weight: 800;
   font-size: 13px;
@@ -660,4 +689,35 @@ select:focus{
 .dot.transfer {
   border: 2px dashed #2563eb;
   background: #bfdbfe;
+}
+
+.pi-block {
+  margin-top: 50px;
+  font-size: 14px;
+  color: #444;
+}
+
+.pi-title {
+  font-weight: 700;
+  color: #0A2A66;
+  margin-bottom: 4px;
+}
+
+.pi-name {
+  font-weight: 600;
+}
+
+.pi-links a {
+  color: #0A2A66;
+  text-decoration: none;
+}
+
+.pi-links a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 600px) {
+  .pi-block {
+    margin-top: 40px;
+    font-size: 13px;
+  }
 }
