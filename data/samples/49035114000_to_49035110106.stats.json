@@ -1,6 +1,6 @@
 {
   "schema": "nova.complete_trip.od_stats.v1",
-  "generated_at": "2026-01-07T01:49:00.854628Z",
+  "generated_at": "2026-01-07T23:45:24.825538Z",
   "od": {
     "origin": "49035114000",
     "destination": "49035110106"
@@ -20,10 +20,10 @@
     "p75": 88.65,
     "max": 427.03333333333336
   },
-  "transfers": {
-    "avg": 0.0,
-    "p75": 0,
-    "max": 0
+  "segments": {
+    "avg": 1.0,
+    "p75": 1,
+    "max": 1
   },
   "mode_involvement": {
     "car": 0.9014084507042254,
