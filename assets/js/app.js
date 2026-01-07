@@ -688,9 +688,9 @@ let currentViewBounds = null;
       + `(IQR ${d.p25.toFixed(1)}–${d.p75.toFixed(1)})`;
 
     // 3️⃣ Transfers
-    const t = stats.segments;
-    document.getElementById("statsSegments").textContent =
-      `Segments: avg ${t.avg}, max ${t.max}`;
+    const t = stats.transfers;
+    document.getElementById("statsTransfers").textContent =
+      `Transfers: avg ${t.avg}, max ${t.max}`;
 
     // 4️⃣ Mode involvement
     const m = stats.mode_involvement;
