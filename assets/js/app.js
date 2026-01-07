@@ -477,6 +477,34 @@ let currentViewBounds = null;
     }
     return await res.json();
   }
+  function renderTravelTimeHistogram(hist) {
+    if (!hist) return;
+
+    const canvas = document.getElementById("travelTimeChart");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    const counts = hist.counts;
+    const maxCount = Math.max(...counts);
+
+    const w = canvas.width;
+    const h = canvas.height;
+    const barW = w / counts.length;
+
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = "#3b82f6";
+
+    counts.forEach((c, i) => {
+      const barH = (c / maxCount) * (h - 10);
+      ctx.fillRect(
+        i * barW + 1,
+        h - barH,
+        barW - 2,
+        barH
+      );
+    });
+  }
+
   function renderStats(stats) {
     if (!stats) {
       document.getElementById("statsTrips").textContent =
@@ -506,6 +534,8 @@ let currentViewBounds = null;
       + `Car ${(m.car * 100).toFixed(0)}%, `
       + `Rail ${(m.rail * 100).toFixed(0)}%, `
       + `Bus ${(m.bus * 100).toFixed(0)}%`;
+    renderTravelTimeHistogram(stats.travel_time_distribution);
+
   }
 
   function setMapStatus(message, type = "info") {
