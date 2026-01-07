@@ -519,6 +519,11 @@ let currentViewBounds = null;
 
     const barW = w / counts.length;
 
+    const LABEL_TOP_Y = 14;          // label 起始 y
+    const LABEL_LINE_GAP = 12;       // 多个 label 的垂直间距
+    const LABEL_SAFE_LEFT = 4;
+    const LABEL_SAFE_RIGHT = w - 4;
+
     // Title
     ctx.save();
     ctx.fillStyle = "#111";
@@ -565,14 +570,10 @@ let currentViewBounds = null;
       return ((clamped - minT) / (maxT - minT)) * w;
     }
 
-    function drawVerticalLine(
-      x,
-      label,
-      color,
-      labelYOffset = 0,
-      align = "right"   // "right" | "left"
-    ) {
+    function drawVerticalLineSafe(x, label, color, row = 0) {
       ctx.save();
+
+      // ===== 垂直线 =====
       ctx.strokeStyle = color;
       ctx.setLineDash([4, 3]);
       ctx.beginPath();
@@ -581,18 +582,29 @@ let currentViewBounds = null;
       ctx.stroke();
       ctx.setLineDash([]);
 
-      ctx.fillStyle = color;
+      // ===== label =====
       ctx.font = "10px sans-serif";
+      ctx.fillStyle = color;
 
       const textW = ctx.measureText(label).width;
-      const textX =
-        align === "left"
-          ? x - textW - 4
-          : x + 4;
+      let textX = x + 4;
 
-      ctx.fillText(label, textX, padTop - 4 + labelYOffset);
+      // 👉 防止出右边界
+      if (textX + textW > LABEL_SAFE_RIGHT) {
+        textX = x - textW - 4;
+      }
+
+      // 👉 防止出左边界
+      if (textX < LABEL_SAFE_LEFT) {
+        textX = LABEL_SAFE_LEFT;
+      }
+
+      const textY = LABEL_TOP_Y + row * LABEL_LINE_GAP;
+      ctx.fillText(label, textX, textY);
+
       ctx.restore();
     }
+
 
 
     const xMedian = Number.isFinite(durStats.median)
@@ -608,54 +620,24 @@ let currentViewBounds = null;
     const medianLabel = `Median ${durStats.median.toFixed(1)}`;
     const meanLabel   = `Mean ${durStats.mean.toFixed(1)}`;
 
-    const medianTextW = ctx.measureText(medianLabel).width;
-    const meanTextW   = ctx.measureText(meanLabel).width;
-    const medianBox = {
-      left: xMedian + 4,
-      right: xMedian + 4 + medianTextW
-    };
 
-    const meanBox = {
-      left: xMean + 4,
-      right: xMean + 4 + meanTextW
-    };
-    const boxesOverlap =
-      medianBox.left < meanBox.right &&
-      medianBox.right > meanBox.left;
-
-    const LINE_GAP_PX = 12;
-
-    // Mean / Median lines
-    if (
-      Number.isFinite(xMedian) &&
-      Number.isFinite(xMean) &&
-      boxesOverlap === true
-    ) {
-      // 情况 1：label box 重叠 → 左右分开
-      drawVerticalLine(
+    if (Number.isFinite(xMedian)) {
+      drawVerticalLineSafe(
         xMedian,
-        medianLabel,
+        `Median ${durStats.median.toFixed(1)}`,
         "#eb253cff",
-        0,
-        "right"
+        0
       );
-      drawVerticalLine(
-        xMean,
-        meanLabel,
-        "#f59e0b",
-        0,
-        "left"
-      );
-    } else {
-      // 情况 2：不重叠 → 正常画
-      if (xMedian !== null) {
-        drawVerticalLine(xMedian, medianLabel, "#eb253cff");
-      }
-      if (xMean !== null) {
-        drawVerticalLine(xMean, meanLabel, "#f59e0b");
-      }
     }
 
+    if (Number.isFinite(xMean)) {
+      drawVerticalLineSafe(
+        xMean,
+        `Mean ${durStats.mean.toFixed(1)}`,
+        "#f59e0b",
+        1
+      );
+    }
 
   }
 
