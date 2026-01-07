@@ -498,7 +498,7 @@ let currentViewBounds = null;
     const edges = hist.bin_edges_min;
 
     const maxCount = Math.max(...counts, 1);
-    const padTop = 14;
+    const padTop = 32;
     const padBottom = 16;
     const chartH = h - padTop - padBottom;
 
@@ -509,7 +509,7 @@ let currentViewBounds = null;
     ctx.fillStyle = "#111";
     ctx.font = "12px sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("Travel Time Distribution", w / 2, 10);
+    ctx.fillText("Travel Time Distribution", w / 2, padTop - 16);
     ctx.restore();
     // y-label
     ctx.save();
@@ -562,7 +562,7 @@ let currentViewBounds = null;
 
       ctx.fillStyle = color;
       ctx.font = "10px sans-serif";
-      ctx.fillText(label, x + 4, 12 + labelYOffset);
+      ctx.fillText(label, x + 4, padTop - 4 + labelYOffset);
       ctx.restore();
     }
 
@@ -574,7 +574,7 @@ let currentViewBounds = null;
       ? timeToX(durStats.mean)
       : null;
 
-    const LINE_GAP_PX = 8;
+    const LINE_GAP_PX = 12;
 
     // Mean / Median lines
     if (xMedian !== null && xMean !== null && Math.abs(xMedian - xMean) < LINE_GAP_PX) {
