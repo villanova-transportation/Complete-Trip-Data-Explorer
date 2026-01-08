@@ -112,7 +112,7 @@ let currentViewBounds = null;
 
   function buildTripSummary(lt) {
     const totalDistance = (lt.legs || [])
-      .reduce((s, l) => s + (l.distance_km || 0), 0);
+      .reduce((s, l) => s + (l.network_distance_km || 0), 0);
 
     const totalDuration = (lt.legs || [])
       .reduce((s, l) => s + (l.duration_min || 0), 0);
@@ -155,7 +155,6 @@ let currentViewBounds = null;
         originMarker.bindPopup(
           `
           <b>Trip summary</b><br>
-          ${summary.origin} → ${summary.destination}<br>
           Distance: ${summary.distanceKm} km<br>
           Time: ${summary.durationMin} min<br>
           Segments: ${summary.segments}
@@ -231,7 +230,7 @@ let currentViewBounds = null;
           `
           <b>Segment</b><br>
           Mode: ${leg.mode}<br>
-          Distance: ${leg.distance_km ?? "N/A"} km<br>
+          Distance: ${leg.network_distance_km ?? "N/A"} km<br>
           Time: ${leg.duration_min ?? "N/A"} min
           `,
           {
