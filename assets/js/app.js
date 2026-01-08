@@ -157,8 +157,8 @@ let currentViewBounds = null;
           <b>Trip summary</b><br>
           Total Distance: ${summary.distanceMile} km<br>
           Total Time: ${summary.durationMin} min<br>
-          Total Segments: ${summary.segments}
-          Start Time: ${summary.startTime}
+          Total Segments: ${summary.segments} <br>
+          Start Time: ${summary.startTime} <br>
           End Time: ${summary.endTime}
           `
         );
