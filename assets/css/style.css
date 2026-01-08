@@ -669,7 +669,11 @@ select:focus{
   white-space: normal;      /* 👈 允许换行 */
   word-break: break-word;   /* 👈 防止长词撑开 */
 }
-
+.legend-meta {
+  font-size: 10px;
+  color: #666;
+  margin-left: auto;
+}
 /* line swatches */
 .swatch.line {
   width: 20px;
@@ -841,11 +845,13 @@ select:focus{
   }
 
   .map-legend .legend-note {
-    font-size: 10px;
-    line-height: 1.35;
-    white-space: normal;
+    display: none;  
   }
-
+  .legend-meta {
+    font-size: 9px;
+    color: #0A2A66;
+    font-weight: 600;
+  }
   .map-legend .dot {
     width: 8px;
     height: 8px;
