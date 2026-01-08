@@ -138,11 +138,6 @@ let currentViewBounds = null;
       const group = L.layerGroup().addTo(layers.tripRoute);
       linkedTripLayers.set(lt.linked_trip_id, group);
 
-      group.on("click", (e) => {
-        L.DomEvent.stopPropagation(e);
-        highlightLinkedTrip(lt.linked_trip_id);
-      });
-
       // 1) origin marker
       if (lt.origin && Number.isFinite(Number(lt.origin.lat)) && Number.isFinite(Number(lt.origin.lon))) {
         const originMarker = L.circleMarker(
@@ -211,6 +206,11 @@ let currentViewBounds = null;
           weight: 3,
           opacity: 0.85
         }).addTo(group).bringToFront();
+
+        line.on("click", (e) => {
+          L.DomEvent.stopPropagation(e);
+          highlightLinkedTrip(lt.linked_trip_id);
+        });
 
         // Trip-level summary（只绑定一次）
         if (!group._summaryBound) {
