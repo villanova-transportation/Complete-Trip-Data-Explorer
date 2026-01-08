@@ -220,7 +220,7 @@ let currentViewBounds = null;
             `
             <b>Trip summary</b><br>
             ${summary.origin} → ${summary.destination}<br>
-            Distance: ${summary.distanceMile} miles<br>
+            Distance: ${summary.distanceMile} mi<br>
             Time: ${summary.durationMin} min<br>
             Segments: ${summary.segments}<br>
             ${summary.startTime} – ${summary.endTime}
@@ -241,7 +241,7 @@ let currentViewBounds = null;
           `
           <b>Segment</b><br>
           Mode: ${leg.mode}<br>
-          Travel Distance: ${leg.network_distance_km.toFixed(2) ?? "N/A"} mile<br>
+          Travel Distance: ${leg.network_distance_km.toFixed(2) ?? "N/A"} mi<br>
           Travel Time: ${leg.duration_min.toFixed(2) ?? "N/A"} min
           `,
           {
