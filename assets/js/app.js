@@ -124,7 +124,7 @@ let currentViewBounds = null;
       startTime: lt.start_time,
       endTime: lt.end_time,
       segments: (lt.legs || []).length,
-      distanceKm: totalDistance.toFixed(2),
+      distanceMile: totalDistance.toFixed(2),
       durationMin: totalDuration.toFixed(1)
     };
   }
@@ -155,9 +155,9 @@ let currentViewBounds = null;
         originMarker.bindPopup(
           `
           <b>Trip summary</b><br>
-          Distance: ${summary.distanceKm} km<br>
-          Time: ${summary.durationMin} min<br>
-          Segments: ${summary.segments}
+          Total Distance: ${summary.distanceMile} km<br>
+          Total Time: ${summary.durationMin} min<br>
+          Total Segments: ${summary.segments}
           `
         );
         group._originMarker = originMarker;
@@ -209,7 +209,7 @@ let currentViewBounds = null;
             `
             <b>Trip summary</b><br>
             ${summary.origin} → ${summary.destination}<br>
-            Distance: ${summary.distanceKm} km<br>
+            Distance: ${summary.distanceMile} mile<br>
             Time: ${summary.durationMin} min<br>
             Segments: ${summary.segments}<br>
             ${summary.startTime} – ${summary.endTime}
@@ -230,8 +230,8 @@ let currentViewBounds = null;
           `
           <b>Segment</b><br>
           Mode: ${leg.mode}<br>
-          Distance: ${leg.network_distance_km ?? "N/A"} km<br>
-          Time: ${leg.duration_min ?? "N/A"} min
+          Travel Distance: ${leg.network_distance_km.toFixed(2) ?? "N/A"} mile<br>
+          Travel Time: ${leg.duration_min.toFixed(2) ?? "N/A"} min
           `,
           {
             sticky: false,
