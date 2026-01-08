@@ -215,17 +215,25 @@ let currentViewBounds = null;
             }
           );
 
+          group._summaryBound = true;
+        }
+
+
         // Segment-level tooltip（每一段都有）
         line.bindTooltip(
           `
-          Segment<br>
+          <b>Segment</b><br>
           Mode: ${leg.mode}<br>
-          Distance: ${leg.distance_km} km<br>
-          Time: ${leg.duration_min} min
+          Distance: ${leg.distance_km ?? "N/A"} km<br>
+          Time: ${leg.duration_min ?? "N/A"} min
           `,
-          { sticky: false, permanent: false }
-          
+          {
+            sticky: false,
+            permanent: false
+          }
         );
+
+
         line.on("mouseover", () => {
           if (selectedTripId !== lt.linked_trip_id) return;
           line.openTooltip();
@@ -235,9 +243,6 @@ let currentViewBounds = null;
           line.closeTooltip();
         });
 
-
-          group._summaryBound = true;
-        }
 
         line.on("click", (e) => {
           L.DomEvent.stopPropagation(e);
