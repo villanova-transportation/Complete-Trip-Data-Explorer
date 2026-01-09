@@ -128,6 +128,13 @@ let currentViewBounds = null;
       durationMin: totalDuration.toFixed(1)
     };
   }
+  function getTripDayFromStartTime(startTime) {
+    // startTime: "2020-01-12T07:20:43"
+    if (!startTime || typeof startTime !== "string") return null;
+    // YYYY-MM-DD → 取 DD
+    return startTime.slice(8, 10); // "01" - "31"
+  }
+
   function drawSampleTrips(linkedTrips) {
     layers.tripRoute.clearLayers();
     linkedTripLayers.clear();
@@ -548,6 +555,7 @@ let currentViewBounds = null;
   async function applyODSelection() {
     const o = document.getElementById("originTract").value;
     const d = document.getElementById("destinationTract").value;
+    const dayValue = document.getElementById("daySelector")?.value || "all";
 
     // 1️⃣ 未选全，不提示（安静）
     if (!o || !d) {
@@ -572,7 +580,26 @@ let currentViewBounds = null;
       layers.tripRoute.clearLayers();
 
       drawODPolygon(sampleJson.od);
-      drawSampleTrips(sampleJson.linked_trips);
+      
+      let filteredTrips = sampleJson.linked_trips;
+
+      // ===== Day filter (Jan only) =====
+      if (dayValue !== "all") {
+        const dayStr = dayValue.padStart(2, "0"); // "1" → "01"
+      
+        filteredTrips = filteredTrips.filter(lt => {
+          const startTime =
+            lt.start_time ||
+            lt.origin?.start_time ||
+            lt.startTime;
+      
+          const tripDay = getTripDayFromStartTime(startTime);
+          return tripDay === dayStr;
+        });
+      }
+      
+      drawSampleTrips(filteredTrips);
+
       renderStats(stats);
 
       setMapStatus(`Loaded OD: ${o} → ${d}`, "info");
@@ -861,6 +888,7 @@ let currentViewBounds = null;
     
   document.getElementById("originTract").addEventListener("change", applyODSelection);
   document.getElementById("destinationTract").addEventListener("change", applyODSelection);
+  document.getElementById("daySelector")?.addEventListener("change", applyODSelection);
 
   /* =========================
      Init
