@@ -384,23 +384,26 @@ let currentViewBounds = null;
 
       // OD 相同
       if (oLat === dLat && oLon === dLon) {
-        const radius = 6 + 10 * (count / maxCount);
-
-        L.circleMarker([oLat, oLon], {
-          radius,
-          color: "#9333ea",          // 紫色：区别跨-tract OD
-          weight: 2,
-          fillColor: "#c084fc",
-          fillOpacity: 0.6,
-          dashArray: "4,2"           // 视觉上“非流向”
-        }).bindPopup(`
-          <b>Intra-tract trips</b><br>
-          Tract: ${d.origin_tract || ""}<br>
-          Trips: ${count}
-        `).addTo(layers.odFlow);
-
         return;
       }
+      // if (oLat === dLat && oLon === dLon) {
+      //   const radius = 6 + 10 * (count / maxCount);
+
+      //   L.circleMarker([oLat, oLon], {
+      //     radius,
+      //     color: "#9333ea",          // 紫色：区别跨-tract OD
+      //     weight: 2,
+      //     fillColor: "#c084fc",
+      //     fillOpacity: 0.6,
+      //     dashArray: "4,2"           // 视觉上“非流向”
+      //   }).bindPopup(`
+      //     <b>Intra-tract trips</b><br>
+      //     Tract: ${d.origin_tract || ""}<br>
+      //     Trips: ${count}
+      //   `).addTo(layers.odFlow);
+
+      //   return;
+      // }
 
 
       // ===== 曲率（用于“伪曲线”）=====
