@@ -437,26 +437,23 @@ let currentViewBounds = null;
 
       // OD 相同
       if (oLat === dLat && oLon === dLon) {
+        const radius = 6 + 10 * (count / maxCount);
+
+        L.circleMarker([oLat, oLon], {
+          radius,
+          color: "#9333ea",          // 紫色：区别跨-tract OD
+          weight: 2,
+          fillColor: "#c084fc",
+          fillOpacity: 0.6,
+          dashArray: "4,2"           // 视觉上“非流向”
+        }).bindPopup(`
+          <b>Intra-tract trips</b><br>
+          Tract: ${d.origin_tract || ""}<br>
+          Trips: ${count}
+        `).addTo(layers.odFlow);
+
         return;
       }
-      // if (oLat === dLat && oLon === dLon) {
-      //   const radius = 6 + 10 * (count / maxCount);
-
-      //   L.circleMarker([oLat, oLon], {
-      //     radius,
-      //     color: "#9333ea",          // 紫色：区别跨-tract OD
-      //     weight: 2,
-      //     fillColor: "#c084fc",
-      //     fillOpacity: 0.6,
-      //     dashArray: "4,2"           // 视觉上“非流向”
-      //   }).bindPopup(`
-      //     <b>Intra-tract trips</b><br>
-      //     Tract: ${d.origin_tract || ""}<br>
-      //     Trips: ${count}
-      //   `).addTo(layers.odFlow);
-
-      //   return;
-      // }
 
 
       // ===== 曲率（用于“伪曲线”）=====
@@ -619,15 +616,23 @@ let currentViewBounds = null;
       return;
     }
 
-    // 2️⃣ O = D（intra-tract trips：允许）
+    // // 2️⃣ O = D（intra-tract trips：允许）
+    // if (o === d) {
+    //   setMapStatus(
+    //     "Intra-tract trips (origin and destination within the same census tract)",
+    //     "info"
+    //   );
+    //   // 不 return，继续加载 samples / stats
+    // }
+    // 2️⃣ O = D（直接禁止）
     if (o === d) {
+      layers.tripRoute.clearLayers();
       setMapStatus(
-        "Intra-tract trips (origin and destination within the same census tract)",
-        "info"
+        "Intra-tract trips are not shown in this view",
+        "warn"
       );
-      // 不 return，继续加载 samples / stats
+      return;
     }
-
     try {
       const sampleJson = await loadSamplesByOD(o, d);
       const stats = await loadStatsForOD(o, d);
