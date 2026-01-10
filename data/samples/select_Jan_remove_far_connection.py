@@ -1,8 +1,7 @@
 # ============================================================
-# Complete Trip Demo Builder (Jan, All ODs)
-# - Build once
-# - Filter at linked-trip level
-# - Export multiple OD JSONs
+# FAST Complete Trip Demo Builder (Jan, All ODs)
+# - OD-first filtering
+# - Geometry built only for needed trips
 # ============================================================
 
 # =========================
@@ -16,11 +15,8 @@ TRACT_SHP = (
 )
 
 MONTHS = ["Jan"]
+MAX_DIST_MILES = 1.0
 
-# geohash–route consistency threshold
-MAX_DIST_MILES = 1.0   # 先放宽，确认有数据
-
-# OD pairs to export
 OD_PAIRS = [
     ("49035114000", "49035980000"),  # center → airport
     ("49035114000", "49035110106"),  # center → canyon
@@ -34,8 +30,6 @@ OD_PAIRS = [
     ("49035101402", "49035114000"),  # uofu → center
     ("49035101402", "49035980000"),  # uofu → airport
     ("49035101402", "49035110106"),  # uofu → canyon
-
-
 ]
 
 # =========================
@@ -91,33 +85,24 @@ USE_COLS = [
     "route_taken"
 ]
 
-monthly_dfs = []
-
+dfs = []
 for m in MONTHS:
     files = glob.glob(f"{PARQUET_DIR}/Salt_Lake-{m}-2020/*.snappy.parquet")
-    if not files:
-        continue
+    dfs.extend([pd.read_parquet(f, columns=USE_COLS) for f in files])
 
-    dfs = [pd.read_parquet(f, columns=USE_COLS) for f in files]
-    df_m = pd.concat(dfs, ignore_index=True)
-
-    df_m["local_datetime_start"] = pd.to_datetime(df_m["local_datetime_start"], errors="coerce")
-    df_m["local_datetime_end"] = pd.to_datetime(df_m["local_datetime_end"], errors="coerce")
-    df_m = df_m[df_m["local_datetime_end"] > df_m["local_datetime_start"]]
-
-    df_m["duration_min"] = (
-        df_m["local_datetime_end"] - df_m["local_datetime_start"]
-    ).dt.total_seconds() / 60
-
-    monthly_dfs.append(df_m)
-
-df = pd.concat(monthly_dfs, ignore_index=True)
+df = pd.concat(dfs, ignore_index=True)
+df["local_datetime_start"] = pd.to_datetime(df["local_datetime_start"], errors="coerce")
+df["local_datetime_end"] = pd.to_datetime(df["local_datetime_end"], errors="coerce")
+df = df[df["local_datetime_end"] > df["local_datetime_start"]]
+df["duration_min"] = (
+    df["local_datetime_end"] - df["local_datetime_start"]
+).dt.total_seconds() / 60
 df = df.sort_values(["linked_trip_id", "local_datetime_start"])
 
-print("Total linked trips (raw):", df["linked_trip_id"].nunique())
+print("Raw linked trips:", df["linked_trip_id"].nunique())
 
 # =========================
-# TRACT JOIN (FOR ALL TRIPS)
+# TRACT JOIN (FAST, ONCE)
 # =========================
 tracts = gpd.read_file(TRACT_SHP).to_crs("EPSG:4326")
 tracts["GEOID"] = tracts["GEOID"].astype(str)
@@ -126,23 +111,32 @@ def gh_to_point(gh):
     lat, lon = pgh.decode(gh)
     return Point(lon, lat)
 
-gdf_o = gpd.GeoDataFrame(
-    df[["geohash7_orig"]],
-    geometry=df["geohash7_orig"].apply(gh_to_point),
-    crs="EPSG:4326"
-)
-
-gdf_d = gpd.GeoDataFrame(
-    df[["geohash7_dest"]],
-    geometry=df["geohash7_dest"].apply(gh_to_point),
-    crs="EPSG:4326"
-)
+gdf_o = gpd.GeoDataFrame(df, geometry=df["geohash7_orig"].apply(gh_to_point), crs="EPSG:4326")
+gdf_d = gpd.GeoDataFrame(df, geometry=df["geohash7_dest"].apply(gh_to_point), crs="EPSG:4326")
 
 df["GEOID_orig"] = gpd.sjoin(gdf_o, tracts, how="left", predicate="within")["GEOID"].values
 df["GEOID_dest"] = gpd.sjoin(gdf_d, tracts, how="left", predicate="within")["GEOID"].values
 
 # =========================
-# BUILD GEOMETRY
+# OD-FIRST LINKED TRIP FILTER
+# =========================
+OD_SET = set(OD_PAIRS)
+
+first = df.groupby("linked_trip_id").first()
+last = df.groupby("linked_trip_id").last()
+
+keep_linked_ids = first.index[
+    [
+        (o, d) in OD_SET
+        for o, d in zip(first["GEOID_orig"], last["GEOID_dest"])
+    ]
+]
+
+df = df[df["linked_trip_id"].isin(keep_linked_ids)]
+print("Linked trips after OD prefilter:", df["linked_trip_id"].nunique())
+
+# =========================
+# LOAD NETWORKS
 # =========================
 auto_links = pd.read_csv(
     f"{BASE_DIR}/Salt_Lake/supplementInputs/network/auto-biggest-connected-graph/link.csv"
@@ -158,27 +152,28 @@ auto_dict = {(int(r.from_osm_node_id), int(r.to_osm_node_id)): r.geometry for r 
 walk_dict = {(int(r.from_osm_node_id), int(r.to_osm_node_id)): r.geometry for r in walk_links.itertuples()}
 transit_dict = {(int(r.from_node_id), int(r.to_node_id)): r.geometry for r in transit_links.itertuples()}
 
+# =========================
+# BUILD GEOMETRY (ONLY FOR KEPT DATA)
+# =========================
 def build_geometry(row):
     nodes = [int(x) for x in str(row.route_taken).split(",") if x.strip().isdigit()]
     if len(nodes) < 2:
         return None
 
-    coords = []
     link_dict = (
         auto_dict if row.travel_mode == "car"
         else walk_dict if row.travel_mode == "walk/bike"
         else transit_dict if row.travel_mode in ["bus", "rail"]
         else None
     )
-
     if link_dict is None:
         return None
 
+    coords = []
     for a, b in zip(nodes[:-1], nodes[1:]):
         if (a, b) in link_dict:
             try:
-                geom = wkt.loads(link_dict[(a, b)])
-                coords.extend(list(geom.coords))
+                coords.extend(wkt.loads(link_dict[(a, b)]).coords)
             except:
                 continue
 
@@ -191,18 +186,12 @@ df = df[df["geometry"].notnull()]
 # BUILD ROUTES + SAMPLES
 # =========================
 def build_route(geom):
-    coords = []
-    for lon, lat in geom.coords:
-        if is_finite(lat) and is_finite(lon):
-            coords.append([float(lat), float(lon)])
+    coords = [[lat, lon] for lon, lat in geom.coords if is_finite(lat) and is_finite(lon)]
     if len(coords) < 2:
         return None
-    if len(coords) > 400:
-        coords = coords[::3]
-    return coords
+    return coords[::3] if len(coords) > 400 else coords
 
 samples = []
-
 for r in df.itertuples():
     route = build_route(r.geometry)
     if route is None:
@@ -211,16 +200,14 @@ for r in df.itertuples():
     o_lon, o_lat = safe_decode_geohash(r.geohash7_orig)
     d_lon, d_lat = safe_decode_geohash(r.geohash7_dest)
 
-    start_dt = r.local_datetime_start
-    duration = r.duration_min
-    end_dt = start_dt + timedelta(minutes=duration) if start_dt and duration else None
-
     samples.append({
         "id": str(r.trip_id),
         "mode": str(r.travel_mode).lower().strip(),
         "route": route,
-        "start_time": start_dt.isoformat(),
-        "end_time": end_dt.isoformat() if end_dt else None,
+        "start_time": r.local_datetime_start.isoformat(),
+        "end_time": (
+            r.local_datetime_start + timedelta(minutes=r.duration_min)
+        ).isoformat(),
         "origin": {
             "lon": o_lon,
             "lat": o_lat,
@@ -247,87 +234,59 @@ for s in samples:
     linked_groups[s["meta"]["linked_trip_id"]].append(s)
 
 linked_trips_full = []
-
 for linked_id, trips in linked_groups.items():
-    trips_sorted = sorted(trips, key=lambda x: x["start_time"])
+    trips = sorted(trips, key=lambda x: x["start_time"])
     linked_trips_full.append({
         "linked_trip_id": linked_id,
-        "origin": trips_sorted[0]["origin"],
-        "destination": trips_sorted[-1]["destination"],
-        "legs": trips_sorted,
-        "weight": max(t["meta"]["weight"] or 0 for t in trips_sorted)
+        "origin": trips[0]["origin"],
+        "destination": trips[-1]["destination"],
+        "legs": trips,
+        "weight": max(t["meta"]["weight"] or 0 for t in trips)
     })
 
-print("Linked trips after build:", len(linked_trips_full))
-
 # =========================
-# FINAL FILTER: GEOHASH–ROUTE CONSISTENCY
+# FINAL CONSISTENCY FILTER
 # =========================
-def filter_linked_trips_by_geohash_route(linked_trips, max_dist_miles):
-    filtered = []
-
+def filter_linked_trips(linked_trips, max_dist):
+    out = []
     for lt in linked_trips:
-        drop = False
-
+        ok = True
         for leg in lt["legs"]:
-            route = leg.get("route")
-            if not route or len(route) < 2:
-                drop = True
+            r = leg["route"]
+            o = leg["origin"]
+            d = leg["destination"]
+            if (
+                haversine_miles(o["lon"], o["lat"], r[0][1], r[0][0]) > max_dist or
+                haversine_miles(d["lon"], d["lat"], r[-1][1], r[-1][0]) > max_dist
+            ):
+                ok = False
                 break
-
-            o_lon = leg["origin"]["lon"]
-            o_lat = leg["origin"]["lat"]
-            d_lon = leg["destination"]["lon"]
-            d_lat = leg["destination"]["lat"]
-
-            first_lat, first_lon = route[0]
-            last_lat, last_lon = route[-1]
-
-            if o_lon is not None and o_lat is not None:
-                if haversine_miles(o_lon, o_lat, first_lon, first_lat) > max_dist_miles:
-                    drop = True
-                    break
-
-            if d_lon is not None and d_lat is not None:
-                if haversine_miles(d_lon, d_lat, last_lon, last_lat) > max_dist_miles:
-                    drop = True
-                    break
-
-        if not drop:
-            filtered.append(lt)
-
-    return filtered
+        if ok:
+            out.append(lt)
+    return out
 
 # =========================
 # EXPORT MULTIPLE ODs
 # =========================
-for ORIG_TRACT, DEST_TRACT in OD_PAIRS:
-
+for ORIG, DEST in OD_PAIRS:
     subset = [
         lt for lt in linked_trips_full
-        if lt["origin"].get("tract_id") == ORIG_TRACT
-        and lt["destination"].get("tract_id") == DEST_TRACT
+        if lt["origin"]["tract_id"] == ORIG and lt["destination"]["tract_id"] == DEST
     ]
-
-    subset = filter_linked_trips_by_geohash_route(
-        subset,
-        MAX_DIST_MILES
-    )
+    subset = filter_linked_trips(subset, MAX_DIST_MILES)
 
     out = {
         "schema": "nova.complete_trip.sample.v2",
         "generated_at": datetime.utcnow().isoformat() + "Z",
         "od": {
-            "origin": {"tract_id": ORIG_TRACT},
-            "destination": {"tract_id": DEST_TRACT}
+            "origin": {"tract_id": ORIG},
+            "destination": {"tract_id": DEST}
         },
         "count": len(subset),
         "linked_trips": subset
     }
 
-    out_name = f"{ORIG_TRACT}_to_{DEST_TRACT}.json"
-
-    with open(out_name, "w", encoding="utf-8") as f:
+    with open(f"{ORIG}_to_{DEST}.json", "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2)
 
-    print(f"Saved {len(subset)} linked trips → {out_name}")
+    print(f"Saved {len(subset)} linked trips → {ORIG}_to_{DEST}.json")
