@@ -37,6 +37,10 @@ let currentViewBounds = null;
       btn.classList.toggle("active", btn.dataset.basemap === name);
     });
   }
+  
+  function safeFixed(x, digits = 2, fallback = "N/A") {
+    return Number.isFinite(x) ? x.toFixed(digits) : fallback;
+  }
 
   /* =========================
      Mode helpers
@@ -301,8 +305,11 @@ let currentViewBounds = null;
           `
           <b>Segment</b><br>
           Mode: ${leg.mode}<br>
-          Travel Distance: ${leg.network_distance_km.toFixed(2) ?? "N/A"} mi<br>
-          Travel Time: ${leg.duration_min.toFixed(2) ?? "N/A"} min
+          // Travel Distance: ${leg.network_distance_km.toFixed(2) ?? "N/A"} mi<br>
+          // Travel Time: ${leg.duration_min.toFixed(2) ?? "N/A"} min
+          Travel Distance: ${safeFixed(leg.network_distance_km, 2)} mi<br>
+          Travel Time: ${safeFixed(leg.duration_min, 2)} min
+
           `,
           {
             sticky: false,
