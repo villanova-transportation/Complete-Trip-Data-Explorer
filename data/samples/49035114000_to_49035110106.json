@@ -1,6 +1,6 @@
 {
   "schema": "nova.complete_trip.sample.v2",
-  "generated_at": "2026-01-10T04:05:30.215648Z",
+  "generated_at": "2026-01-10T04:13:12.721327Z",
   "od": {
     "origin": {
       "tract_id": "49035114000"
@@ -1969,11 +1969,11 @@
           },
           "meta": {
             "linked_trip_id": "4BAQwYPBRg0o7Nqd97xx0qDOaWG9dY4pavE1V2VrRWZ74jRvXe9E1K-4alXP0lWy6o",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "4BMAa9L0MyBZjlq4xq97PBVBl6BQ6gLYqoDzxBawz4pg9On7BQ5Bgl-lEO4gb5EzQp24",
@@ -14089,11 +14089,11 @@
           },
           "meta": {
             "linked_trip_id": "J9lNbQNB4GPa1e0gQvONGvn0nY9jJJDG64yKbbVXAbnQ66ZqP6rGMP-BWw7dG0Ax5J0MZyWnX6QaEQNBKBNG",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "J9vplJwOzozy0G6EXd6WD9yeQngZBQ5adqy6gxvrX6gdv9K7GJyENw-dKePqnDRWJ6pv",
@@ -33255,11 +33255,11 @@
           },
           "meta": {
             "linked_trip_id": "nbQggbVKovPXg9epnDQ2LvlqyGnd1jKYxgLelGQdWlpaO7bzGXV9ez-JOB6b6X279yjQ",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "nbQggbVKovPXg9epnDQ2LvlqyGnd1jKYxgLelGQdWlpaO7bzGXV9ez-LdOvo0Q5B6BZg",
@@ -34037,11 +34037,11 @@
           },
           "meta": {
             "linked_trip_id": "nbQggbVKovPXg9epnDQ2LvlqyGnd1jKYxgLelGQdWlpaO7bzGXV9ez-LdOvo0Q5B6BZg",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "nbQggbVKovPXg9epnDQ2LvlqyGnd1jKYxgLelGQdWlpaO7bzGXV9ez-r0JoD6ZgoRRVy",
@@ -34787,11 +34787,11 @@
           },
           "meta": {
             "linked_trip_id": "nbQggbVKovPXg9epnDQ2LvlqyGnd1jKYxgLelGQdWlpaO7bzGXV9ez-r0JoD6ZgoRRVy",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "qOMLX22xwxrJYyyMGAV5W44GWndx6DjGZ7g7e2gO9yod2KOOxXbV6D-LdO1MvRaDng0y",

@@ -1,6 +1,6 @@
 {
   "schema": "nova.complete_trip.sample.v2",
-  "generated_at": "2026-01-10T04:05:31.082301Z",
+  "generated_at": "2026-01-10T04:13:13.600405Z",
   "od": {
     "origin": {
       "tract_id": "49035110106"
@@ -12827,7 +12827,7 @@
           },
           "meta": {
             "linked_trip_id": "GWQj052JyvQWQNzKKnElgajALqyy9ldMGZ4GwZlQ9K90oWDZq01xnb-dJ2o4qpaZpA6bX5rZrZnDvAw1Lo04",
-            "weight": NaN
+            "weight": null
           }
         },
         {
@@ -13727,7 +13727,7 @@
           }
         }
       ],
-      "weight": NaN
+      "weight": 18.62495687029441
     },
     {
       "linked_trip_id": "GWpbpZozWNNvYoNGWnX9ODDadbEXr9wya709ML9qZRAXjqgE2N1nYx-eKNx0BeZvKyzg",
@@ -20343,11 +20343,11 @@
           },
           "meta": {
             "linked_trip_id": "NXoNMXAvJaN7DNEN7W01o9xD5AZl9lB0YGWeVGMMXBXPQQKBDL7ALM-OEJ4yv2zGYw",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "NXy9DqgerNjp1zrEN99OvxGonKKZNevvdg0BL4QPVlgqdvqwKrPQnY-OOEBRjKlRBY7G0AWxbjKzdEqY0pyW",
@@ -20497,7 +20497,7 @@
           },
           "meta": {
             "linked_trip_id": "NXy9DqgerNjp1zrEN99OvxGonKKZNevvdg0BL4QPVlgqdvqwKrPQnY-OOEBRjKlRBY7G0AWxbjKzdEqY0pyW",
-            "weight": NaN
+            "weight": null
           }
         },
         {
@@ -21097,7 +21097,7 @@
           },
           "meta": {
             "linked_trip_id": "NXy9DqgerNjp1zrEN99OvxGonKKZNevvdg0BL4QPVlgqdvqwKrPQnY-OOEBRjKlRBY7G0AWxbjKzdEqY0pyW",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
@@ -25579,7 +25579,7 @@
           },
           "meta": {
             "linked_trip_id": "VQP1Yg9w7q5RoyB9Bv4QKpaLYebbPa4DENZwR7NJVzdKdeyw9rLvga-NGr9NBovgYgl2No4JVnD4pJqx52ZN",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
@@ -32519,11 +32519,11 @@
           },
           "meta": {
             "linked_trip_id": "dW1gExDxerGrvrRAOLqgLAEKdW5JEZrKz9XvBgywwojGpQJ2BMgegn-5A4XMvZ579VXE",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "nbQggbVKovPXg9epnDQ2LvlqyGnd1jKYxgLelGQdWlpaO7bzGXV9ez-LdOvyVzeZdjE7",
@@ -41793,11 +41793,11 @@
           },
           "meta": {
             "linked_trip_id": "y5AyJynvZOnojzGPxBx4r2Opl7LrxreWX0pNqRwrynozdwl5VXZQy2-9PZpLjb4OOADG2BZYL2WR9q0LNVre",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     }
   ]
 }

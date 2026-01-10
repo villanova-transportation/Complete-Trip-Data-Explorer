@@ -1,6 +1,6 @@
 {
   "schema": "nova.complete_trip.sample.v2",
-  "generated_at": "2026-01-10T04:05:31.546433Z",
+  "generated_at": "2026-01-10T04:13:14.060097Z",
   "od": {
     "origin": {
       "tract_id": "49035101402"
@@ -4905,11 +4905,11 @@
           },
           "meta": {
             "linked_trip_id": "0jZBnjWjjxL2OPjKyO94ap7ve7pEQgnoEbwRByxoZoa7zodRKGJrAK-Qdl49vOvxoyR45VroLa4pEKMPREQ7",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "1DnYv4ZZ0V4EvZXeYAE2q17zobNaZnbxrNvVPvjWLaP9BnY2DpgZ1g-oxBvnxbKZAp",
@@ -6899,11 +6899,11 @@
           },
           "meta": {
             "linked_trip_id": "1DnYv4ZZ0V4EvZXeYAE2q17zobNaZnbxrNvVPvjWLaP9BnY2DpgZ1g-oxBvnxbKZAp",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "1P4XpELGXNEwvqjEAQgVVM0jjwApWoO9qxJlwxAoENgGb0aY95e6L9-bnyP2lBbqjwBMy9EK5NxPzPoKdp0M",
@@ -8761,11 +8761,11 @@
           },
           "meta": {
             "linked_trip_id": "4BPPvZKqL2KxzeZRWB1GK2ZNvoG4r7YjBApQjVKW0GP6PnpQvWM0oo-Bwa9Volv04o",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "4Bx06rAA17XjrvzGdjOOrEO4WELLqv6dNodA7KaR4N02ny6PPJBNqo-n0Z01K4DM9VyQ4aQe5ZQElG0KbX2",
@@ -13687,11 +13687,11 @@
           },
           "meta": {
             "linked_trip_id": "6KyAGd5xYQK2VMgKqwP7Q76L1dzMn2nB9YoRJ2vB2rKPX7pWM170bz-4ELMye417aOeD",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "726GeGZELRpzgMdX2yMYJ7PNYVdMw4lqeXxV1bOaXQGavabjM5XrEQ-Jgy2wq9PYpZKwj0gWpn00v1zKLJdX",
@@ -16509,11 +16509,11 @@
           },
           "meta": {
             "linked_trip_id": "E6voNMZODxQZrnnpRDQgYMe19bylJQoKaNROP5xxEP4OrvxloRyW9r-Gz1VdQdvMyr",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "EZPBP1gdEQZRXJ4EjvJPBdwRLbezNx6WE6ZjxlgR0E0Zw6BEpBba2a-X57L9Bypna4gG",
@@ -18221,11 +18221,11 @@
           },
           "meta": {
             "linked_trip_id": "EZPwyKr21wJ4j5WoGWgjMN0XyzXPa92RPn5vOZ7glLJb90pGvR7ALn-MjNqaX2Nwb1NVOnGy5V4AL6LR6241",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "JM2aGnpNEnwe1NwBDWR6walop44Gxlyl2G9V7VdllaqMOvJ4MWE0zw-Dre2j2zJ62zJD",
@@ -19493,11 +19493,11 @@
           },
           "meta": {
             "linked_trip_id": "K6DynQjaPo4GBR5p5MzZ00MQnRrbOAllA50wvAO0nNGOl10MyZeB5L-q9g5bY7RElGMGdvw9BjVzOKpPp0rx",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "LZRzLwlN0Gajjjg5lnBQzPvWJvORop20QlEq9dl1Z91RGxBDolwYaP-O1wPKAdVwVGwZ",
@@ -30217,11 +30217,11 @@
           },
           "meta": {
             "linked_trip_id": "jL1jllb1E2AVj2zpX4PxQEn9Djg2B2vLZv50D2EMnzdXRv7qB0pbVV-MwXnj9poJAWqj",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "jL1jllb1E2AVj2zpX4PxQEn9Djg2B2vLZv50D2EMnzdXRv7qB0pbVV-bpgepJawDjdBNLl0GKKoJ0b2lrAn",
@@ -30483,11 +30483,11 @@
           },
           "meta": {
             "linked_trip_id": "jL1jllb1E2AVj2zpX4PxQEn9Djg2B2vLZv50D2EMnzdXRv7qB0pbVV-bpgepJawDjdBNLl0GKKoJ0b2lrAn",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "jL1jllb1E2AVj2zpX4PxQEn9Djg2B2vLZv50D2EMnzdXRv7qB0pbVV-pV4OwVYP1rqK7eW5nYGnqwNbbPQ1y",
@@ -30749,11 +30749,11 @@
           },
           "meta": {
             "linked_trip_id": "jL1jllb1E2AVj2zpX4PxQEn9Djg2B2vLZv50D2EMnzdXRv7qB0pbVV-pV4OwVYP1rqK7eW5nYGnqwNbbPQ1y",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "jL1jllb1E2AVj2zpX4PxQEn9Djg2B2vLZv50D2EMnzdXRv7qB0pbVV-v5VNoQOAOo09Kj5LRweO2pvMbPKdq",
@@ -31015,11 +31015,11 @@
           },
           "meta": {
             "linked_trip_id": "jL1jllb1E2AVj2zpX4PxQEn9Djg2B2vLZv50D2EMnzdXRv7qB0pbVV-v5VNoQOAOo09Kj5LRweO2pvMbPKdq",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "nbWdlzYNb7pNAX4MZRwAd4OQxxGaR0je7qrWgb4N6xPydarbRLKzRg-Gd6q590rxadw9",
@@ -38263,11 +38263,11 @@
           },
           "meta": {
             "linked_trip_id": "qOG10NlXE2ge6wLELNe4X0LX7GK2G9B41qG0z9VPNep1LKyAoZLall-n0ZbJ4dgYQZgXnOxn6P0BNvg7Pdg",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "qONZ4oKjGzoy70vL10lD7RodYZJlRQ5BaG4Qpp4PVZ6eJZYAMe9xN1-vY10jgyABGpeL",
@@ -39917,11 +39917,11 @@
           },
           "meta": {
             "linked_trip_id": "rBaxV5A4M5VpwZvwnnMQajobqWqAaepGpJ5WL9Wxw9Yn0g1KoD24X7-PGrPGn1Yv1dMln5vAZdxDnjGAXWGz",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "rX67w1KEQn1wADevq5aR4PGZG75vJznzqJ6vbZBy52z1wJjGOY7YLz-DZMxpyLgLG7lN9nrDMDXga2ZlE6b",
@@ -41123,11 +41123,11 @@
           },
           "meta": {
             "linked_trip_id": "xG4QdL6ZER7axaJwyy2GyVvr7JzRD6w4WozOYQp0pAA5wnQRKbwVVa-Wg0LrrQAG76wZzE6qA1M45pNWBlJ",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "y5AMPaVDgWXgevrDQp0ZE07J227VQraxxjqvb1nxqrVG9rbLw6a9oY-GgzDXNqw4Wl559qP9w51xLxEx6NdP",

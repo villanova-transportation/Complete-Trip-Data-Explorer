@@ -2,6 +2,7 @@
 # FAST Complete Trip Demo Builder (Jan, All ODs)
 # - OD-first filtering
 # - Geometry built only for needed trips
+# - JSON-safe (NO NaN / NO invalid values)
 # ============================================================
 
 # =========================
@@ -17,19 +18,23 @@ TRACT_SHP = (
 MONTHS = ["Jan"]
 MAX_DIST_MILES = 1.0
 
+OUTPUT_DIR = "./data/samples"
+import os
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
 OD_PAIRS = [
-    ("49035114000", "49035980000"),  # center → airport
-    ("49035114000", "49035110106"),  # center → canyon
-    ("49035114000", "49035101402"),  # center → uofu
-    ("49035980000", "49035114000"),  # airport → center
-    ("49035980000", "49035110106"),  # airport → canyon
-    ("49035980000", "49035101402"),  # airport → uofu 
-    ("49035110106", "49035114000"),  # canyon → center
-    ("49035110106", "49035980000"),  # canyon → airport
-    ("49035110106", "49035101402"),  # canyon → uofu
-    ("49035101402", "49035114000"),  # uofu → center
-    ("49035101402", "49035980000"),  # uofu → airport
-    ("49035101402", "49035110106"),  # uofu → canyon
+    ("49035114000", "49035980000"),
+    ("49035114000", "49035110106"),
+    ("49035114000", "49035101402"),
+    ("49035980000", "49035114000"),
+    ("49035980000", "49035110106"),
+    ("49035980000", "49035101402"),
+    ("49035110106", "49035114000"),
+    ("49035110106", "49035980000"),
+    ("49035110106", "49035101402"),
+    ("49035101402", "49035114000"),
+    ("49035101402", "49035980000"),
+    ("49035101402", "49035110106"),
 ]
 
 # =========================
@@ -46,10 +51,9 @@ import json
 import math
 from datetime import datetime, timedelta
 from collections import defaultdict
-from shapely.geometry import mapping
 
 # =========================
-# UTILS
+# UTILS (JSON-SAFE)
 # =========================
 def haversine_miles(lon1, lat1, lon2, lat2):
     R = 3958.8
@@ -61,6 +65,18 @@ def haversine_miles(lon1, lat1, lon2, lat2):
 
 def is_finite(x):
     return x is not None and isinstance(x, (int, float)) and math.isfinite(x)
+
+def clean_num(x):
+    if x is None:
+        return None
+    try:
+        x = float(x)
+        return x if math.isfinite(x) else None
+    except:
+        return None
+
+def clean_coord(x):
+    return x if is_finite(x) else None
 
 def safe_decode_geohash(gh):
     try:
@@ -102,7 +118,7 @@ df = df.sort_values(["linked_trip_id", "local_datetime_start"])
 print("Raw linked trips:", df["linked_trip_id"].nunique())
 
 # =========================
-# TRACT JOIN (FAST, ONCE)
+# TRACT JOIN
 # =========================
 tracts = gpd.read_file(TRACT_SHP).to_crs("EPSG:4326")
 tracts["GEOID"] = tracts["GEOID"].astype(str)
@@ -118,42 +134,33 @@ df["GEOID_orig"] = gpd.sjoin(gdf_o, tracts, how="left", predicate="within")["GEO
 df["GEOID_dest"] = gpd.sjoin(gdf_d, tracts, how="left", predicate="within")["GEOID"].values
 
 # =========================
-# OD-FIRST LINKED TRIP FILTER
+# OD-FIRST FILTER
 # =========================
 OD_SET = set(OD_PAIRS)
 
 first = df.groupby("linked_trip_id").first()
 last = df.groupby("linked_trip_id").last()
 
-keep_linked_ids = first.index[
-    [
-        (o, d) in OD_SET
-        for o, d in zip(first["GEOID_orig"], last["GEOID_dest"])
-    ]
+keep_ids = first.index[
+    [(o, d) in OD_SET for o, d in zip(first["GEOID_orig"], last["GEOID_dest"])]
 ]
 
-df = df[df["linked_trip_id"].isin(keep_linked_ids)]
+df = df[df["linked_trip_id"].isin(keep_ids)]
 print("Linked trips after OD prefilter:", df["linked_trip_id"].nunique())
 
 # =========================
 # LOAD NETWORKS
 # =========================
-auto_links = pd.read_csv(
-    f"{BASE_DIR}/Salt_Lake/supplementInputs/network/auto-biggest-connected-graph/link.csv"
-)
-walk_links = pd.read_csv(
-    f"{BASE_DIR}/Salt_Lake/supplementInputs/network/walk-biggest-connected-graph/link.csv"
-)
-transit_links = pd.read_csv(
-    f"{BASE_DIR}/Salt_Lake/supplementInputs/network/UTA/link with flow.csv"
-)
+auto_links = pd.read_csv(f"{BASE_DIR}/Salt_Lake/supplementInputs/network/auto-biggest-connected-graph/link.csv")
+walk_links = pd.read_csv(f"{BASE_DIR}/Salt_Lake/supplementInputs/network/walk-biggest-connected-graph/link.csv")
+transit_links = pd.read_csv(f"{BASE_DIR}/Salt_Lake/supplementInputs/network/UTA/link with flow.csv")
 
 auto_dict = {(int(r.from_osm_node_id), int(r.to_osm_node_id)): r.geometry for r in auto_links.itertuples()}
 walk_dict = {(int(r.from_osm_node_id), int(r.to_osm_node_id)): r.geometry for r in walk_links.itertuples()}
 transit_dict = {(int(r.from_node_id), int(r.to_node_id)): r.geometry for r in transit_links.itertuples()}
 
 # =========================
-# BUILD GEOMETRY (ONLY FOR KEPT DATA)
+# BUILD GEOMETRY
 # =========================
 def build_geometry(row):
     nodes = [int(x) for x in str(row.route_taken).split(",") if x.strip().isdigit()]
@@ -209,35 +216,35 @@ for r in df.itertuples():
             r.local_datetime_start + timedelta(minutes=r.duration_min)
         ).isoformat(),
         "origin": {
-            "lon": o_lon,
-            "lat": o_lat,
+            "lon": clean_coord(o_lon),
+            "lat": clean_coord(o_lat),
             "geohash": r.geohash7_orig,
             "tract_id": r.GEOID_orig
         },
         "destination": {
-            "lon": d_lon,
-            "lat": d_lat,
+            "lon": clean_coord(d_lon),
+            "lat": clean_coord(d_lat),
             "geohash": r.geohash7_dest,
             "tract_id": r.GEOID_dest
         },
         "meta": {
             "linked_trip_id": r.linked_trip_id,
-            "weight": r.trip_weight
+            "weight": clean_num(r.trip_weight)
         }
     })
 
 # =========================
 # BUILD LINKED TRIPS
 # =========================
-linked_groups = defaultdict(list)
+groups = defaultdict(list)
 for s in samples:
-    linked_groups[s["meta"]["linked_trip_id"]].append(s)
+    groups[s["meta"]["linked_trip_id"]].append(s)
 
-linked_trips_full = []
-for linked_id, trips in linked_groups.items():
+linked_trips = []
+for lid, trips in groups.items():
     trips = sorted(trips, key=lambda x: x["start_time"])
-    linked_trips_full.append({
-        "linked_trip_id": linked_id,
+    linked_trips.append({
+        "linked_trip_id": lid,
         "origin": trips[0]["origin"],
         "destination": trips[-1]["destination"],
         "legs": trips,
@@ -245,11 +252,11 @@ for linked_id, trips in linked_groups.items():
     })
 
 # =========================
-# FINAL CONSISTENCY FILTER
+# FINAL FILTER
 # =========================
-def filter_linked_trips(linked_trips, max_dist):
+def filter_linked_trips(trips, max_dist):
     out = []
-    for lt in linked_trips:
+    for lt in trips:
         ok = True
         for leg in lt["legs"]:
             r = leg["route"]
@@ -266,11 +273,11 @@ def filter_linked_trips(linked_trips, max_dist):
     return out
 
 # =========================
-# EXPORT MULTIPLE ODs
+# EXPORT
 # =========================
 for ORIG, DEST in OD_PAIRS:
     subset = [
-        lt for lt in linked_trips_full
+        lt for lt in linked_trips
         if lt["origin"]["tract_id"] == ORIG and lt["destination"]["tract_id"] == DEST
     ]
     subset = filter_linked_trips(subset, MAX_DIST_MILES)
@@ -286,7 +293,8 @@ for ORIG, DEST in OD_PAIRS:
         "linked_trips": subset
     }
 
-    with open(f"./data/samples/{ORIG}_to_{DEST}.json", "w", encoding="utf-8") as f:
-        json.dump(out, f, indent=2)
+    out_path = f"{OUTPUT_DIR}/{ORIG}_to_{DEST}.json"
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(out, f, indent=2, allow_nan=False)
 
-    print(f"Saved {len(subset)} linked trips → {ORIG}_to_{DEST}.json")
+    print(f"Saved {len(subset)} linked trips → {out_path}")

@@ -1,6 +1,6 @@
 {
   "schema": "nova.complete_trip.sample.v2",
-  "generated_at": "2026-01-10T04:05:31.598563Z",
+  "generated_at": "2026-01-10T04:13:14.109505Z",
   "od": {
     "origin": {
       "tract_id": "49035101402"
@@ -5121,11 +5121,11 @@
           },
           "meta": {
             "linked_trip_id": "6PaoQMJWj7o9O7lP61bjWdoQx5rJYejK5aoarrNyxKad10jBvJoKV4-pMnBRgBr65p6V",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "B2eyMrPrzjRVvRXv2BMb9q1LAYOleG47wzGNYY1rZx6WB2l6w0dewo-aP2dlPD0oEM9Y",
@@ -8103,7 +8103,7 @@
           },
           "meta": {
             "linked_trip_id": "GWRwJ2Db0YEjajx9XJ0NOn175MOqz4lnW2Be7olQ27jMzD2wbaMVOj-2p1POVo6YZ9WAB92aZvKqAeR4bEB",
-            "weight": NaN
+            "weight": null
           }
         },
         {
@@ -8463,7 +8463,7 @@
           }
         }
       ],
-      "weight": NaN
+      "weight": 23.878381235453237
     },
     {
       "linked_trip_id": "GWRwJ2Db0YEjajx9XJ0NOn175MOqz4lnW2Be7olQ27jMzD2wbaMVOj-q2qvNyPADqY9K",
@@ -11131,11 +11131,11 @@
           },
           "meta": {
             "linked_trip_id": "NXoNMXAvJaN7DNEN7W01o9xD5AZl9lB0YGWeVGMMXBXPQQKBDL7ALM-RVJronjjXdj2O",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "VQP1Yg9w7q5RoyB9Bv4QKpaLYebbPa4DENZwR7NJVzdKdeyw9rLvga-DWxyQGq7EQjWJLXeN41zLroa5lABO",
@@ -11837,11 +11837,11 @@
           },
           "meta": {
             "linked_trip_id": "VQP1Yg9w7q5RoyB9Bv4QKpaLYebbPa4DENZwR7NJVzdKdeyw9rLvga-DWxyQGq7EQjWJLXeN41zLroa5lABO",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "VQP1Yg9w7q5RoyB9Bv4QKpaLYebbPa4DENZwR7NJVzdKdeyw9rLvga-RGYjE2dXwewNzEdq15VDq2wPNlKJP",
@@ -16969,11 +16969,11 @@
           },
           "meta": {
             "linked_trip_id": "bqgPbGdlRRZ4pwaYbNp9gZKp6rNGoNZZey0bEGjAqpJg7Bd7oxxRyK-zdnE6lQRrEoKaWNpqQpV9Eo4WWj9",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "dW1gExDxerGrvrRAOLqgLAEKdW5JEZrKz9XvBgywwojGpQJ2BMgegn-dKeANzyx2AvJW",
@@ -19365,11 +19365,11 @@
           },
           "meta": {
             "linked_trip_id": "nbQggbVKovPXg9epnDQ2LvlqyGnd1jKYxgLelGQdWlpaO7bzGXV9ez-4ELPa7oxrJ1Yo",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "nbQggbVKovPXg9epnDQ2LvlqyGnd1jKYxgLelGQdWlpaO7bzGXV9ez-671JZb4qZLxp9",
@@ -22331,11 +22331,11 @@
           },
           "meta": {
             "linked_trip_id": "nbQggbVKovPXg9epnDQ2LvlqyGnd1jKYxgLelGQdWlpaO7bzGXV9ez-WbY9WjlRrjwAndxeEVAQpRpaRK57M",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "nbQggbVKovPXg9epnDQ2LvlqyGnd1jKYxgLelGQdWlpaO7bzGXV9ez-X57p4p07EXWWB",

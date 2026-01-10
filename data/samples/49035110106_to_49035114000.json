@@ -1,6 +1,6 @@
 {
   "schema": "nova.complete_trip.sample.v2",
-  "generated_at": "2026-01-10T04:05:31.013229Z",
+  "generated_at": "2026-01-10T04:13:13.523774Z",
   "od": {
     "origin": {
       "tract_id": "49035110106"
@@ -7045,11 +7045,11 @@
           },
           "meta": {
             "linked_trip_id": "4jG5gAMx6MvA7EVr4yNK4Gq04z7d9VQ9Dbrvl7geRpx5KJpwnLvd6K-X57Z4gbJYWg5B",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "7KPR241X7GpVNgA2qwxgQ1NL2rLQRj04JBggnBJoQO94g1vPd0W1Jr-vY1XWXMRQX2vL",
@@ -19507,11 +19507,11 @@
           },
           "meta": {
             "linked_trip_id": "KWzJGrJMlbBXGBdYWd51rRYNrlVBRNYJQLwGZylWa4lZeKq0oP0LQE-7jrXJO9Gvvbz6",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "MOVL5nXPyxg7v6JP5bM2y0g1YjRqn6MPGOP6eJVyPXrjRBj2YYEzZK-2A7gvNrAWqn",
@@ -37469,11 +37469,11 @@
           },
           "meta": {
             "linked_trip_id": "bABJoVBrBYvB275BXwyGxDNVorxy4BpGg5P1baeWPlwPwxyGpYe5B7-eBo9jX62zKo",
-            "weight": NaN
+            "weight": null
           }
         }
       ],
-      "weight": NaN
+      "weight": 0
     },
     {
       "linked_trip_id": "ebPn9xjWjRezWLanbyWQgPa9O4VEp7J0jgVNvB5Pqz54yVyMwD4WZr-q2q0Z0NyxeZRK",
