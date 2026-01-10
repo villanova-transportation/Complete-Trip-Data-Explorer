@@ -978,7 +978,14 @@ let currentViewBounds = null;
 
     // ===== Load samples =====
 
-    applyODSelection(); // 用当前下拉框默认值加载
+
+    // 🔒 显式设置默认 OD 和 day（防止依赖 HTML 顺序）
+    document.getElementById("originTract").value = "49035980000";      // Airport
+    document.getElementById("destinationTract").value = "49035110106"; // Canyon
+    document.getElementById("daySelector").value = "all";              // All days
+
+    applyODSelection(); // 🚀 页面打开就加载 Airport → Canyon, all trips
+
     
     // ===== Mobile OD selectors =====
     const oMobile = document.getElementById("originTractMobile");
