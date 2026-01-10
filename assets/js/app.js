@@ -913,7 +913,7 @@ let currentViewBounds = null;
       + `Car ${(m.car * 100).toFixed(1)}%, `
       + `Rail ${(m.rail * 100).toFixed(1)}%, `
       + `Bus ${(m.bus * 100).toFixed(1)}%, `
-      + `Walk/bike ${(m.walk * 100).toFixed(1)}%`;
+      + `Walk/bike ${(m.walk * 100).toFixed(2)}%`;
     renderTravelTimeHistogram(
       stats.travel_time_distribution,
       stats.trip_duration_min

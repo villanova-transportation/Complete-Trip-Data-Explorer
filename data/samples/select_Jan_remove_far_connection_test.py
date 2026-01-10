@@ -18,7 +18,6 @@ TRACT_SHP = (
 
 MONTHS = ["Jan"]
 MAX_DIST_MILES = 1.0
-MAX_SAMPLES = 5
 
 OUTPUT_DIR = "./data/samples"
 import os
@@ -181,6 +180,50 @@ def build_geometry(row):
 
 df["geometry"] = df.apply(build_geometry, axis=1)
 df = df[df["geometry"].notnull()]
+def haversine_miles(lon1, lat1, lon2, lat2):
+    R = 3958.8  # Earth radius in miles
+    lon1, lat1, lon2, lat2 = map(
+        np.radians, [lon1, lat1, lon2, lat2]
+    )
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+    a = (
+        np.sin(dlat / 2) ** 2
+        + np.cos(lat1) * np.cos(lat2) * np.sin(dlon / 2) ** 2
+    )
+    return 2 * R * np.arcsin(np.sqrt(a))
+
+def leg_route_distance_ok(leg, max_dist_miles):
+    """
+    Check if origin/destination are close enough to route geometry
+    """
+    geom = leg.get("route")
+    if not geom or len(geom) < 2:
+        return False
+
+    # route geometry first/last point (lat, lon)
+    route_start_lat, route_start_lon = geom[0]
+    route_end_lat, route_end_lon = geom[-1]
+
+    # origin
+    o = leg["origin"]
+    d = leg["destination"]
+
+    if o["lat"] is None or o["lon"] is None:
+        return False
+    if d["lat"] is None or d["lon"] is None:
+        return False
+
+    dist_o = haversine_miles(
+        o["lon"], o["lat"],
+        route_start_lon, route_start_lat
+    )
+    dist_d = haversine_miles(
+        d["lon"], d["lat"],
+        route_end_lon, route_end_lat
+    )
+
+    return dist_o <= max_dist_miles and dist_d <= max_dist_miles
 
 # =========================
 # BUILD SAMPLES（🔒 对齐 leg 时间语义）
@@ -254,6 +297,11 @@ linked_trips_full = []
 
 for lid, trips in groups.items():
     trips = sorted(trips, key=lambda x: x["start_time"])
+    if not all(
+        leg_route_distance_ok(t, MAX_DIST_MILES)
+        for t in trips
+    ):
+        continue
 
     for i, t in enumerate(trips):
         t["leg_index"] = i
