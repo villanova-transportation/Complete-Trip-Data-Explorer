@@ -286,7 +286,7 @@ for ORIG, DEST in OD_PAIRS:
         "linked_trips": subset
     }
 
-    with open(f"{ORIG}_to_{DEST}.json", "w", encoding="utf-8") as f:
+    with open(f"./data/samples/{ORIG}_to_{DEST}.json", "w", encoding="utf-8") as f:
         json.dump(out, f, indent=2)
 
     print(f"Saved {len(subset)} linked trips → {ORIG}_to_{DEST}.json")
