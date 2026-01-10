@@ -371,3 +371,92 @@ for ORIG, DEST in OD_PAIRS:
         json.dump(out, f, indent=2, allow_nan=False)
 
     print(f"Saved {len(subset)} linked trips → {out_path}")
+
+    # =========================
+    # OD-LEVEL STATS (STRICTLY OLD DEFINITION)
+    # =========================
+
+    if subset:
+        # 1️⃣ per linked trip aggregation
+        trip_durations = []
+        trip_segments = []
+        trip_modes = []
+
+        for lt in subset:
+            legs = lt["legs"]
+
+            # total duration = sum of leg durations
+            total_dur = sum(
+                leg["duration_min"]
+                for leg in legs
+                if leg["duration_min"] is not None
+            )
+
+            trip_durations.append(total_dur)
+            trip_segments.append(len(legs))
+            trip_modes.append(set(leg["mode"] for leg in legs))
+
+        dur = np.array(trip_durations)
+        segments = np.array(trip_segments)
+        modes = trip_modes
+
+        def pct(a, q): return float(np.percentile(a, q))
+
+        BIN_WIDTH = 5
+        MAX_TIME = 180
+
+        bins = np.arange(0, MAX_TIME + BIN_WIDTH, BIN_WIDTH)
+        dur_capped = np.clip(dur, 0, MAX_TIME)
+        hist_counts, bin_edges = np.histogram(dur_capped, bins=bins)
+
+        travel_time_hist = {
+            "bin_width_min": BIN_WIDTH,
+            "max_time_min": MAX_TIME,
+            "bin_edges_min": bin_edges.tolist(),
+            "counts": hist_counts.tolist()
+        }
+
+        stats = {
+            "schema": "nova.complete_trip.od_stats.v1",
+            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "od": {"origin": ORIG, "destination": DEST},
+            "coverage": {"temporal": "year-2020", "spatial": "Salt Lake 6-county"},
+            "counts": {"linked_trips": int(len(dur))},
+            "trip_duration_min": {
+                "min": float(dur.min()),
+                "mean": float(dur.mean()),
+                "p25": pct(dur, 25),
+                "median": pct(dur, 50),
+                "p75": pct(dur, 75),
+                "max": float(dur.max())
+            },
+            "segments": {
+                "avg": float(segments.mean()),
+                "p75": int(pct(segments, 75)),
+                "max": int(segments.max())
+            },
+            "mode_involvement": {
+                "car": float(sum("car" in m for m in modes) / len(modes)),
+                "bus": float(sum("bus" in m for m in modes) / len(modes)),
+                "rail": float(sum("rail" in m for m in modes) / len(modes)),
+                "walk": float(sum("walk/bike" in m for m in modes) / len(modes))
+            },
+            "travel_time_distribution": travel_time_hist
+        }
+
+    else:
+        stats = {
+            "schema": "nova.complete_trip.od_stats.v1",
+            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "od": {"origin": ORIG, "destination": DEST},
+            "coverage": {"temporal": "year-2020", "spatial": "Salt Lake 6-county"},
+            "counts": {"linked_trips": 0},
+            "note": "No linked trips after distance + OD filter"
+        }
+
+    # 写 stats
+    stats_path = f"{OUTPUT_DIR}/{ORIG}_to_{DEST}.stats.json"
+    with open(stats_path, "w", encoding="utf-8") as f:
+        json.dump(stats, f, indent=2, allow_nan=False)
+
+    print(f"✓ Stats written → {stats_path}")

@@ -1,6 +1,6 @@
 {
   "schema": "nova.complete_trip.sample.v2",
-  "generated_at": "2026-01-10T13:01:19.381020Z",
+  "generated_at": "2026-01-10T13:25:59.346222Z",
   "od": {
     "origin": {
       "tract_id": "49035980000",
