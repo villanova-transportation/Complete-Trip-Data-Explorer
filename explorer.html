@@ -13,143 +13,264 @@
 </head>
 
 <body>
-  <!-- Top Bar (Villanova blue + NovaMobility wordmark + Villanova V) -->
-  <header class="top-bar">
+  <!-- ===== App Shell ===== -->
+  <div id="app-shell">
 
-    <div class="left-group">
-      <div class="lab-wordmark">
-        <span class="brand">
-          <span class="nova">Nova</span><span class="mobility">Mobility</span> Lab
-        </span>
-        <span class="sep">|</span>
-        <span class="page-title">Complete Trip Data</span>
-      </div>
-    </div>
-
-    <div class="right-group">
-      <img
-        src="img/Villanova_V_logo.jpg"
-        alt="Villanova University"
-        class="villanova-logo"
-      >
-    </div>
-</header>
-  
-  <div id="layout">
-    <!-- Sidebar -->
-    <aside id="sidebar">
-
-      <!-- ===== TOP: View Selector ===== -->
-      <div class="sidebar-top">
-        <div class="view-grid">
-          <button class="view-pill active" data-view="samples">Samples</button>
-          <button class="view-pill" data-view="od">OD</button>
-          <button class="view-pill">Access</button>
-          <button class="view-pill">Egress</button>
-          <button class="view-pill">Network</button>
-          <button class="view-pill">Speed</button>
-          <button class="view-pill">Application</button>
+    <!-- ===== Top Bar ===== -->
+    <header class="top-bar">
+      <div class="left-group">
+        <!-- ✅ 新增：Mobile menu toggle -->
+        <button id="menuToggle" class="menu-toggle">☰</button>
+        <div class="lab-wordmark">
+          <span class="brand">
+            <span class="nova">Nova</span><span class="mobility">Mobility</span> Lab
+          </span>
+          <span class="sep">|</span>
+          <div class="title-block">
+            <span class="page-title">Salt Lake City Complete Trip Data</span>
+            <span class="page-subtitle">
+              (Demo Version · Salt Lake City Metropolitan Area)
+            </span>
+          </div>
         </div>
       </div>
 
-      <!-- ===== BOTTOM: Filters ===== -->
-      <div class="sidebar-bottom">
+      <div class="right-group">
+        <img
+          src="img/Villanova_V_logo.jpg"
+          alt="Villanova University"
+          class="villanova-logo"
+        />
+      </div>
+    </header>
+    
+    <!-- ===== Mobile OD Bar ===== -->
+    <div class="mobile-od-bar">
+      <div class="form-row">
+        <label>Origin</label>
+        <select id="originTractMobile"></select>
+      </div>
 
-        <h4 class="sidebar-title">Filters</h4>
+      <div class="form-row">
+        <label>Destination</label>
+        <select id="destinationTractMobile"></select>
+      </div>
+    </div>
 
-        <div class="form-row">
-          <label>Month</label>
-          <select>
-            <option>All</option>
-            <option>2020-01</option>
-            <option>2020-02</option>
-            <option>2020-03</option>
-            <option>2020-04</option>
-            <option>2020-05</option>
-            <option>2020-06</option>
-            <option>2020-07</option>
-            <option>2020-08</option>
-            <option>2020-09</option>
-            <option>2020-10</option>
-            <option>2020-11</option>
-            <option>2020-12</option>
-          </select>
-        </div>
+    <!-- ===== Main Layout ===== -->
+    <div id="layout">
 
-        <div class="form-row">
-          <label>Mode</label>
+      <!-- ===== Sidebar ===== -->
+      <aside id="sidebar">
 
-          <div class="mode-list">
-            <label class="check-item">
-              <input type="checkbox" checked>
-              <span>Car</span>
-            </label>
+        <!-- 滚动内容区 -->
+        <div class="sidebar-content">
 
-            <label class="check-item">
-              <input type="checkbox" checked>
-              <span>Bus</span>
-            </label>
+          <h4 class="sidebar-title">Filters</h4>
 
-            <label class="check-item">
-              <input type="checkbox" checked>
-              <span>Rail</span>
-            </label>
+          <!-- <div class="form-row">
+            <label>Month</label>
+            <select>
+              <option>All</option>
+              <option>2020-01</option>
+              <option>2020-02</option>
+              <option>2020-03</option>
+              <option>2020-04</option>
+              <option>2020-05</option>
+              <option>2020-06</option>
+              <option>2020-07</option>
+              <option>2020-08</option>
+              <option>2020-09</option>
+              <option>2020-10</option>
+              <option>2020-11</option>
+              <option>2020-12</option>
+            </select>
+          </div> -->
 
-            <label class="check-item">
-              <input type="checkbox" checked>
-              <span>Walk / Bike</span>
-            </label>
+          <div class="form-row">
+            <label>Origin Census Tract</label>
+            <select id="originTract">
+              <option value="49035980000">49035980000 (Airport)</option>
+              <option value="49035114000">49035114000 (Downtown)</option>
+              <option value="49035110106">49035110106 (Canyon)</option>
+              <option value="49035101402">49035101402 (U of U)</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label>Destination Census Tract</label>
+            <select id="destinationTract">
+              <option value="49035110106">49035110106 (Canyon)</option>
+              <option value="49035114000">49035114000 (Downtown)</option>
+              <option value="49035980000">49035980000 (Airport)</option>
+              <option value="49035101402">49035101402 (U of U)</option>
+            </select>
           </div>
           
-          <label>Facilities</label>
-          <div class="facility-list">
-            <label class="check-item">
-              <input type="checkbox" data-layer="bus_stop">
-              Bus Stop
-            </label>
-            <label class="check-item">
-              <input type="checkbox" data-layer="bus_route">
-              Bus Route
-            </label>
-            <label class="check-item">
-              <input type="checkbox" data-layer="rail_stop">
-              Rail Stop
-            </label>
-            <label class="check-item">
-              <input type="checkbox" data-layer="rail_route">
-              Rail Route
-            </label>
+          <div class="form-row">
+            <label>Day (Jan.)</label>
+            <select id="daySelector">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+              <option value="18">18</option>
+              <option value="19">19</option>
+              <option value="20">20</option>
+              <option value="21">21</option>
+              <option value="22">22</option>
+              <option value="23">23</option>
+              <option value="24">24</option>
+              <option value="25">25</option>
+              <option value="26">26</option>
+              <option value="27">27</option>
+              <option value="28">28</option>
+              <option value="29">29</option>
+              <option value="30">30</option>
+              <option value="31">31</option>
+              <option value="all">All</option>
+            </select>
           </div>
 
-      </div>
-      
-      <!-- Basemap toggle (bottom) -->
-      <div class="basemap-toggle">
-        <span class="label">Map</span>
-        <button class="bm-btn active" data-basemap="light">Light</button>
-        <button class="bm-btn" data-basemap="dark">Dark</button>
-      </div>
 
-    </aside>
+          <!-- <div class="form-row">
+            <label>Mode</label>
+            <div class="mode-list">
+              <label class="check-item"><input type="checkbox" checked> Car</label>
+              <label class="check-item"><input type="checkbox" checked> Bus</label>
+              <label class="check-item"><input type="checkbox" checked> Rail</label>
+              <label class="check-item"><input type="checkbox" checked> Walk / Bike</label>
+            </div>
+          </div> -->
+
+          <div class="form-row">
+            <label>Facilities</label>
+            <div class="facility-list">
+              <label class="check-item">
+                <input type="checkbox" data-layer="bus_stop"> Bus Stop
+              </label>
+              <label class="check-item">
+                <input type="checkbox" data-layer="bus_route"> Bus Route
+              </label>
+              <label class="check-item">
+                <input type="checkbox" data-layer="rail_stop"> Rail Stop
+              </label>
+              <label class="check-item">
+                <input type="checkbox" data-layer="rail_route"> Rail Route
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 固定底部 -->
+        <div class="sidebar-footer">
+          <span class="label">Map</span>
+          <button class="bm-btn active" data-basemap="light">Light</button>
+          <button class="bm-btn" data-basemap="dark">Dark</button>
+        </div>
+        <!-- <div class="sidebar-attribution">
+          <div class="attr-lab">NovaMobility Lab</div>
+          <div class="attr-pi">
+            PI: Chenfeng Xiong, Ph.D.
+          </div>
+          <div class="attr-links">
+            <a href="https://cfxiong.github.io/" target="_blank">Website</a> ·
+            <a href="mailto:chenfeng.xiong@villanova.edu">Email</a>
+          </div>
+        </div> -->
+      </aside>
+
+      <!-- ===== Map ===== -->
+      <main id="map-wrap">
+        <div id="map"></div>
+
+        <div id="statsPanel" class="stats-panel">
+          <div class="stats-title">OD Trip Summary (Jan.2020)</div>
+
+          <div class="stats-row" id="statsTrips"></div>
+          <div class="stats-row" id="statsDuration"></div>
+          <div class="stats-row" id="statsSegments"></div>
+          <div class="stats-row" id="statsModes"></div>
+
+          <div class="stats-row">
+            <canvas id="travelTimeChart" width="220" height="120"></canvas>
+          </div>
+
+        </div>
+
+        <div id="mapLegend" class="map-legend">
+          <div class="legend-title">Legend</div>
+
+          <div class="legend-row">
+            <span class="swatch line car"></span> Car
+          </div>
+          <div class="legend-row">
+            <span class="swatch line bus"></span> Bus
+          </div>
+          <div class="legend-row">
+            <span class="swatch line rail"></span> Rail
+          </div>
+          <div class="legend-row">
+            <span class="swatch line walk"></span> Walk / Bike
+          </div>
+
+          <hr>
+
+          <div class="legend-row">
+            <span class="dot origin"></span>
+            <span class="legend-label"
+                  title="Geohash level 7 (cell center)">
+              Origin
+            </span>
+          </div>
+
+          <div class="legend-row">
+            <span class="dot destination"></span>
+            <span class="legend-label"
+                  title="Geohash level 7 (cell center)">
+              Destination
+            </span>
+          </div>
+
+          <div class="legend-row">
+            <span class="dot transfer"></span>
+            <span class="legend-label"
+                  title="Geohash level 7 (cell center)">
+              Transfer
+            </span>
+          </div>
 
 
+        <div class="legend-note">
+          All points represent geohash7 cell centers (spatially aggregated).
+        </div>
 
-    <!-- Map -->
-    <main id="map-wrap">
-      <div id="map"></div>
+        </div>
 
-      <div id="mapStatus" class="map-status">
-        Ready · Sample data loaded
-      </div>
-    </main> 
+        <div id="mapStatus" class="map-status">
+          Ready · Sample data loaded
+
+        </div>
+      </main>
+
+    </div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <script src="assets/js/app.js"></script>
-
-
-
 </body>
 </html>
- 

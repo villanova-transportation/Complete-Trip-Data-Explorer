@@ -1,1 +1,0 @@
-linked_trip_id,trip_id,tour_id,travel_mode,local_datetime_start,local_datetime_end,network_distance,route_distance,geohash7_orig,geohash7_dest,access_stop,access_stop_id,egress_stop,egress_stop_id,trip_purpose,trip_weight,route_taken,duration_min,GEOID_orig,GEOID_dest,geometry

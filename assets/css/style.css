@@ -5,7 +5,7 @@
   --bg-soft:#f6f8ff;
   --text:#333;
   --muted:#555;
-  --topbar-h: 56px;
+  --topbar-h: 58px;
 }
 /* ===== Global ===== */
 html, body {
@@ -15,7 +15,7 @@ html, body {
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial;
-  background:#fff;
+  background:#eef2f8;
   color:var(--text);
   line-height:1.55;
 }
@@ -47,6 +47,17 @@ body{
 .primary-btn:hover{ background:#133b8a; }
 .landing-footer{ margin-top:60px; font-size:14px; color:var(--muted); }
 
+#app-shell {
+  height: 100%;          /* ← 关键 */
+  margin: 0px;
+  background: #ffffff;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+
+  display: flex;
+  flex-direction: column;
+}
 /* ===== Top Bar ===== */
 .top-bar {
   height: var(--topbar-h);
@@ -54,13 +65,31 @@ body{
   align-items: center;
   justify-content: space-between;
 
-  padding: 0px 18px;
+  padding: 0px 16px;
   background: var(--nova-deep);
   color: #fff;
 }
+.menu-toggle {
+  display: none;           /* 默认 desktop 不显示 */
+  font-size: 22px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+}
+@media (max-width: 768px) {
+  .page-subtitle {
+    display: none;
+  }
+}
 .lab-wordmark {
+  display: flex;              /* 🔑 关键 */
+  align-items: baseline;      /* 🔑 不同字号对齐 */
+  gap: 6px;
+
   font-weight: 800;
-  white-space: nowrap;
+  white-space: nowrap;        /* 禁止任何换行 */
 }
 
 .lab-wordmark .brand {
@@ -71,7 +100,13 @@ body{
   font-size: 18px;
   opacity: 0.95;
 }
-
+.lab-wordmark .page-subtitle {
+  font-size: 12px;        /* 更小 */
+  font-weight: 400;      /* 不加粗 */
+  color: #cfe3ff;
+  opacity: 0.75;         /* 再弱一点 */
+  white-space: nowrap;
+}
 .lab-wordmark .sep {
   margin: 0 6px;
   opacity: 0.7;
@@ -85,29 +120,58 @@ body{
 
 .villanova-logo {
   display: block; 
-  height: 38px;
-  padding: 5px;     /* 关键：增大内边距 */
+  height: 32px;
+  padding: 2px 3px;     /* 关键：增大内边距 */
   opacity: .95;
-  border-radius: 6px;
+  border-radius: 5px;
   background: #fff; /* 如果你希望白框可见，必须加 */
 }
 
 /* ===== Layout ===== */
 #layout {
+  flex: 1; 
   display: flex;
-  height: calc(100vh - var(--topbar-h));
+  padding: 0 12px;
+  box-sizing: border-box;
+  min-height: 0; 
+}
+
+/* ==================== */
+/* ===== SideBar ===== */
+/* ==================== */
+.sidebar-title {
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  color: #0A2A66;
 }
 
 #sidebar {
-  width: 260px;
-  min-width: 240px;
-  padding: 0;
+  width: 280px;        /* 🔥 给一个明确锚点 */
+  min-width: 280px;
+  flex-shrink: 0;
+  background: #fff;
+
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #e5e7eb;
+}
+@media (max-width: 768px) {
+  #sidebar {
+    position: absolute;
+    left: 0;
+    top: var(--topbar-h);
+    height: calc(100% - var(--topbar-h));
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    z-index: 2000;
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+  }
 }
 .sidebar-top {
-  padding: 10px 12px;
+  padding: 6px 8px;
   border-bottom: 1px solid #eef1f7;
   background: #fafbff;
 }
@@ -115,6 +179,27 @@ body{
   position: sticky;
   top: 0;
   z-index: 10;
+}
+
+.sidebar-content {
+  flex: 1 1 auto;        /* 🔥 吃掉剩余高度 */
+  overflow-y: auto;      /* 只有这里滚 */
+  padding: 8px 8px;
+}
+
+.sidebar-footer {
+  margin-top: auto;  
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-top: 1px solid #eef1f7;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 11px;
+  color: #444;
+  background: #fafbff;
 }
 
 .view-grid {
@@ -145,17 +230,6 @@ body{
   display: flex;
   flex-direction: column;
   gap: 6px;
-}
-.sidebar-bottom {
-  padding: 14px 12px;
-  overflow-y: auto;
-}
-
-.sidebar-title {
-  font-size: 13px;
-  font-weight: 800;
-  margin-bottom: 10px;
-  color: #0A2A66;
 }
 
 .lens-btn {
@@ -189,12 +263,48 @@ body{
 #map{
   width:100%;
   height:100%;
+  position: relative; 
 }
-@media (max-width: 1200px) {
-  #sidebar {
-    width: 240px;
-  }
+
+/* ===== Stats Panel ===== */
+.stats-panel {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1200;
+
+  min-width: 240px;
+  background: #ffffff;
+  border: 1px solid #e2e6f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+
+  font-size: 12px;
+  color: #222;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
+ 
+.stats-title {
+  font-weight: 800;
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #0A2A66;
+}
+
+.stats-row {
+  margin: 4px 0;
+  line-height: 1.4;
+}
+
+#travelTimeChart {
+  display: block;
+  width: 260px;
+  height: 120px;
+  margin-top: 6px;
+  border-top: 1px solid #eef1f7;
+  padding-top: 6px;
+}
+
 /* ===== Cards / UI ===== */
 .card{
   background:#fff;
@@ -428,7 +538,7 @@ select:focus{
 }
 /* ===== Basemap Toggle (Sidebar Bottom) ===== */
 .basemap-toggle {
-  margin-top: auto;              /* 🔥 推到底部 */
+  flex-shrink: 0;               /* 🔥 不被压缩 */
   padding: 8px 10px;
   border-top: 1px solid #eef1f7;
 
@@ -437,8 +547,10 @@ select:focus{
   gap: 6px;
 
   font-size: 11px;
-  color: #555;
+  color: #444;
+  background: #fafbff;
 }
+
 
 .basemap-toggle .label {
   margin-right: 4px;
@@ -517,4 +629,278 @@ select:focus{
 .recenter-btn:active {
   transform: translateY(1px);
   box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.map-legend {
+  position: absolute;
+  right: 16px;
+  bottom: 28px;
+  z-index: 1000;  
+  min-width: 140px;
+  max-width: 200px;      
+  background: #fff;
+  border: 1px solid #e2e6f0;
+  border-radius: 10px;
+  padding: 8px 10px;
+  pointer-events: auto;  
+  font-size: 12px;
+  color: #222;
+  overflow: visible;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.map-legend .legend-title {
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: #0A2A66;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+.legend-note {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #555;
+  line-height: 1.35;
+
+  white-space: normal;      /* 👈 允许换行 */
+  word-break: break-word;   /* 👈 防止长词撑开 */
+}
+.legend-meta {
+  font-size: 10px;
+  color: #666;
+  margin-left: auto;
+}
+/* line swatches */
+.swatch.line {
+  width: 20px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.line.car { background: #391b57ff; }
+.line.bus { background: rgba(37,166,235,1); }
+.line.rail { background: #e23c1bff; }
+.line.walk { background: #15c856ff; }
+
+/* point symbols */
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot.origin { background: #22c55e; }
+.dot.destination { background: #ef4444; }
+.dot.transfer {
+  border: 2px dashed #2563eb;
+  background: #bfdbfe;
+}
+
+.pi-block {
+  margin-top: 50px;
+  font-size: 14px;
+  color: #444;
+}
+
+.pi-title {
+  font-weight: 700;
+  color: #0A2A66;
+  margin-bottom: 6px;
+}
+
+.pi-name {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.pi-contact div {
+  line-height: 1.6;
+}
+
+.pi-contact a {
+  color: #0A2A66;
+  text-decoration: none;
+  word-break: break-all;
+}
+
+.pi-contact a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .pi-block {
+    font-size: 13px;
+  }
+}
+
+.sidebar-attribution {
+  padding: 8px 10px 10px;
+  border-top: 1px solid #eef1f7;
+  font-size: 8px;
+  color: #555;
+  background: #fafbff;
+}
+
+.attr-lab {
+  font-weight: 700;
+  color: #0A2A66;
+}
+
+.attr-pi {
+  margin-top: 2px;
+}
+
+.attr-links a {
+  color: #0A2A66;
+  text-decoration: none;
+}
+
+.attr-links a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 768px) {
+  .sidebar-attribution {
+    font-size: 8px;
+  }
+}
+/* =========================================================
+   Mobile layout: top OD bar + map
+========================================================= */
+
+.mobile-od-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+
+  /* 隐藏左侧 sidebar */
+  #sidebar {
+    display: none;
+  }
+
+  /* 显示顶部 OD bar */
+  .mobile-od-bar {
+    display: flex;
+    gap: 12px;
+    padding: 10px 12px;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .mobile-od-bar .form-row {
+    flex: 1;
+  }
+
+  /* 地图占满剩余空间 */
+  #layout {
+    padding: 0;
+  }
+
+  /* stats / legend 稍微缩小 */
+  .stats-panel {
+    top: 8px;
+    right: 8px;
+    min-width: 160px;
+    max-width: 180px;
+
+    padding: 6px 8px;
+    font-size: 10.5px;
+    line-height: 1.3;
+  }
+
+  .stats-title {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  #travelTimeChart {
+    width: 160px;
+    height: 90px;
+    padding-top: 4px;
+  }
+
+  .map-legend {
+    left: 8px;
+    right: auto;
+    bottom: 8px;
+    max-width: 140px;
+
+    min-width: unset;
+    padding: 6px 8px;
+    font-size: 10.5px;
+  }
+
+  .map-legend .legend-title {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .map-legend .swatch.line {
+    width: 16px;
+    height: 2px;
+  }
+
+  .map-legend .legend-note {
+    display: none;  
+  }
+  .legend-meta {
+    font-size: 9px;
+    color: #0A2A66;
+    font-weight: 600;
+  }
+  .map-legend .dot {
+    width: 8px;
+    height: 8px;
+  }  
+  
+  .map-legend .legend-title {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .map-legend .legend-row {
+    margin: 2px 0;
+    gap: 6px;
+  }
+
+  .map-legend .swatch.line {
+    width: 16px;
+    height: 2px;
+  }
+
+
+}
+@media (max-width: 768px) {
+
+  .top-bar {
+    padding: 0 8px;
+  }
+
+  .lab-wordmark .brand {
+    font-size: 16px;
+  }
+
+  .lab-wordmark .page-title {
+    font-size: 14px;
+  }
+
+  .lab-wordmark {
+    gap: 4px;
+  }
+
+}
+@media (max-width: 768px) {
+
+  .lab-wordmark .page-subtitle {
+    display: none;
+  }
+
+}
+
+.leaflet-interactive:focus {
+  outline: none !important;
 }
